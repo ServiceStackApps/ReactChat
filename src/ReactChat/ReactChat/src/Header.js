@@ -38,6 +38,7 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                 };
                 Header.prototype.render = function () {
                     var _this = this;
+                    console.log(this.props.isAuthenticated);
                     return (React.createElement("div", {id: "top"}, React.createElement("a", {href: "https://github.com/ServiceStackApps/LiveDemos"}, React.createElement("img", {src: "https://raw.githubusercontent.com/ServiceStack/Assets/master/img/artwork/logo-32-inverted.png", style: { height: "28px", padding: "10px 0 0 0" }})), React.createElement("div", {id: "social"}, React.createElement("div", {id: "welcome"}, this.props.activeSub
                         ? React.createElement("span", null, React.createElement("span", null, "Welcome, ", this.props.activeSub.displayName), React.createElement("img", {src: this.props.activeSub.profileUrl}))
                         : null), this.props.isAuthenticated

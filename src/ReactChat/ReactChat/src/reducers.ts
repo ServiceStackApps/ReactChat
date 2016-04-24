@@ -3,6 +3,8 @@
 
     CONNECTED: (state, action) => Object.assign({}, state, { isConnected: true }),
 
+    AUTH: (state, action) => Object.assign({}, state, { isAuthenticated: action.isAuthenticated }),
+
     MESSAGES_ADD: (state, action) => Object.assign({}, state, {
          messages: [...state.messages, ...convertMsgs(action.messages, anonId(state.messages))]
     }),

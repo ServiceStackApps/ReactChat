@@ -8,6 +8,7 @@ System.register([], function(exports_1, context_1) {
             exports_1("reducers", reducers = {
                 CHANNELS_SELECT: function (state, action) { return Object.assign({}, state, { selectedChannel: action.channel }); },
                 CONNECTED: function (state, action) { return Object.assign({}, state, { isConnected: true }); },
+                AUTH: function (state, action) { return Object.assign({}, state, { isAuthenticated: action.isAuthenticated }); },
                 MESSAGES_ADD: function (state, action) { return Object.assign({}, state, {
                     messages: state.messages.concat(convertMsgs(action.messages, anonId(state.messages)))
                 }); },

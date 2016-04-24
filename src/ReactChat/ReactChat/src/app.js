@@ -194,6 +194,11 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                     $(document).on("customEvent", function (e, msg, msgEvent) {
                         _this.addMessages([{ message: "[event " + e.type + " message: " + msg + "]", cls: "event", channel: msgEvent.channel }]);
                     });
+                    $.getJSON("auth", function (r) {
+                        _this.props.setAuthenticated(true);
+                    }, function (e) {
+                        _this.props.setAuthenticated(false);
+                    });
                 };
                 App.prototype.render = function () {
                     var _this = this;
@@ -213,6 +218,7 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                     }); }, function (dispatch) { return ({
                         selectChannel: function (channel) { return dispatch({ type: 'CHANNELS_SELECT', channel: channel }); },
                         didConnect: function () { return dispatch({ type: 'CONNECTED' }); },
+                        setAuthenticated: function (isAuthenticated) { return dispatch({ type: 'AUTH', isAuthenticated: isAuthenticated }); },
                         addMessages: function (messages) { return dispatch({ type: 'MESSAGES_ADD', messages: messages }); },
                         setMessages: function (messages) { return dispatch({ type: 'MESSAGES_SET', messages: messages }); },
                         refreshUsers: function () { return dispatch({ type: 'USERS_REFRESH' }); },

@@ -70,6 +70,7 @@ let store = createStore(
     (dispatch) => ({
         selectChannel: (channel:string) => dispatch({ type: 'CHANNELS_SELECT', channel }),
         didConnect: () => dispatch({ type: 'CONNECTED' }),
+        setAuthenticated: (isAuthenticated) => dispatch({ type: 'AUTH', isAuthenticated }),
         addMessages: (messages:string[]) => dispatch({ type: 'MESSAGES_ADD', messages }),
         setMessages: (messages:string[]) => dispatch({ type: 'MESSAGES_SET', messages }),
         refreshUsers: () => dispatch({ type: 'USERS_REFRESH' }),
@@ -174,6 +175,12 @@ class App extends React.Component<any, any> {
 
         $(document).on("customEvent", (e, msg, msgEvent) => {
             this.addMessages([{ message: `[event ${e.type} message: ${msg}]`, cls: "event", channel: msgEvent.channel }]);
+        });
+
+        $.getJSON("auth", r => {
+            this.props.setAuthenticated(true);
+        }, e => {
+            this.props.setAuthenticated(false);
         });
     }
 
