@@ -15,11 +15,6 @@ declare namespace __React {
             element: DOMElement<P>,
             container: Element,
             callback?: (element: Element) => any): Element;
-        function render(element: JSX.Element, container: HTMLElement);
-        function render<P>(
-            element: any,
-            container: Element | HTMLElement,
-            callback?: (element: Element) => any): Element;
         function render<P, S>(
             element: ClassicElement<P>,
             container: Element,

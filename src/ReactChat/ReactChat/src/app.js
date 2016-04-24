@@ -212,7 +212,6 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                         tvUrl: state.tvUrl
                     }); }, function (dispatch) { return ({
                         selectChannel: function (channel) { return dispatch({ type: 'CHANNELS_SELECT', channel: channel }); },
-                        logError: function (message) { return dispatch({ type: 'ERRORS_LOG', message: message }); },
                         didConnect: function () { return dispatch({ type: 'CONNECTED' }); },
                         addMessages: function (messages) { return dispatch({ type: 'MESSAGES_ADD', messages: messages }); },
                         setMessages: function (messages) { return dispatch({ type: 'MESSAGES_SET', messages: messages }); },

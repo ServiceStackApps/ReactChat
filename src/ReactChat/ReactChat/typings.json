@@ -7,9 +7,5 @@
     "react-redux": "github:DefinitelyTyped/DefinitelyTyped/react-redux/react-redux.d.ts#3faa118b0403f4fef613e6577ef6d27c7d2d483e",
     "redux": "github:DefinitelyTyped/DefinitelyTyped/redux/redux.d.ts#c2bfaedeee7ae4ed5e0f01ebcf4af7acfe2c77c3",
     "ss-utils": "github:DefinitelyTyped/DefinitelyTyped/ss-utils/ss-utils.d.ts#229cb92825ec05c986dff721018b7130126f09a9"
-  },
-  "dependencies": {
-    "react-redux": "github:andrew-w-ross/typings-react-redux#6be88a57427f8ec220cad13d68565fd5f5711146",
-    "redux": "github:andrew-w-ross/typings-redux#2e0b57e18c6240d17fde045573d74e649762437b"
   }
 }
