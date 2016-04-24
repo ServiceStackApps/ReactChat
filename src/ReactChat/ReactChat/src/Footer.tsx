@@ -11,13 +11,11 @@ import { reduxify } from './utils';
         addMessageHistory: (message:string) => dispatch({ type:'MESSAGEHISTORY_ADD', message }),
         setHistoryIndex: (index: number) => dispatch({ type: 'MESSAGEHISTORY_INDEX', index }),
         setValue: (value:string) => dispatch({ type:'VALUE_SET', value })
-    })
+    }),
+    null,
+    { withRef: true }
 )
 export class Footer extends React.Component<any, any> {
-    //mixins:[ 
-    //    Reflux.listenTo(Actions.userSelected,"userSelected"), 
-    //    Reflux.listenTo(Actions.setText,"setText")
-    //],
 
     componentDidMount() {
         this.txtMsg.focus();
@@ -27,7 +25,7 @@ export class Footer extends React.Component<any, any> {
         return this.refs["txtMsg"] as HTMLInputElement;
     }
 
-    postMsg() {
+    postMsg = () => {
         var msg = this.txtMsg.value,
             parts,
             to = null,
@@ -77,10 +75,6 @@ export class Footer extends React.Component<any, any> {
         this.props.setValue("");
     }
 
-    userSelected(user) {
-        this.setText(`@${user.displayName} `);
-    }
-
     setText(txt) {
         this.props.setValue(txt).then(() => {
             this.txtMsg.focus();
@@ -96,30 +90,34 @@ export class Footer extends React.Component<any, any> {
         var value = this.props.value;
 
         if ($.ss.getSelection()) {
-            if (keycode === "9" || keycode === "13" || keycode === "32" || keycode === "39") {
+            if (keycode === Keys.tab ||
+                keycode === Keys.enter ||
+                keycode === Keys.space ||
+                keycode === Keys.right) {
 
                 value += " ";
                 this.props.setValue(value).then(() => {
                     if (this.txtMsg.setSelectionRange)
                         this.txtMsg.setSelectionRange(value.length, value.length);
                 });
-
+                    
                 e.preventDefault();
                 return;
             }
         }
         const msgHistory = this.props.msgHistory;
-        if (keycode === "13") { //enter
+        var historyIndex = this.props.historyIndex;
+        if (keycode === Keys.enter) {
             this.props.setHistoryIndex(-1);
             this.postMsg();
-        } else if (keycode === "38") { //up arrow
-            this.props.setHistoryIndex(Math.min(++this.props.historyIndex, msgHistory.length));
-            this.props.setValue(this.props.msgHistory[msgHistory.length - 1 - this.props.historyIndex]);
+        } else if (keycode === Keys.up) {
+            this.props.setHistoryIndex(Math.min(++historyIndex, msgHistory.length));
+            this.props.setValue(msgHistory[msgHistory.length - 1 - historyIndex] || "");
             e.preventDefault();
         }
-        else if (keycode === "40") { //down arrow
-            this.props.setHistoryIndex(Math.max(--this.props.historyIndex, -1));
-            this.props.setValue(msgHistory[msgHistory.length - 1 - this.props.historyIndex]);
+        else if (keycode === Keys.down) {
+            this.props.setHistoryIndex(Math.max(--historyIndex, -1));
+            this.props.setValue(msgHistory[msgHistory.length - 1 - historyIndex] || "");
         } else {
             this.props.setHistoryIndex(-1);
         }
@@ -132,7 +130,7 @@ export class Footer extends React.Component<any, any> {
         if (!$.ss.getSelection() && value[0] === "@" && value.indexOf(" ") < 0) {
             var partialVal = value.substring(1);
 
-            var matchingNames = this.props.users
+            const matchingNames = this.props.users
                 .map(x => x.displayName.replace(" ", ""))
                 .filter(x => (x.substring(0, partialVal.length).toLowerCase() === partialVal.toLowerCase()
                     && x.toLowerCase() !== activeSub.displayName.toLowerCase()));
@@ -154,11 +152,22 @@ export class Footer extends React.Component<any, any> {
                 <input ref="txtMsg" id="txtMsg"
                     type="text"
                     value={this.props.value}
-                    onChange={this.handleChange}
-                    onKeyDown={this.handleKeyDown}
-                    onKeyUp={this.handleKeyUp} />
+                    onChange={e => this.handleChange(e)}
+                    onKeyDown={e => this.handleKeyDown(e)}
+                    onKeyUp={e => this.handleKeyUp(e)} />
                 <button id="btnSend" style={{ marginLeft: 5 }} onClick={this.postMsg}>Send</button>
             </div>
         );
     }
 }
+
+enum Keys {
+    tab = 9,
+    enter = 13,
+    space = 32,
+    left = 37,
+    up = 38,
+    right = 39,
+    down = 40,
+}
+

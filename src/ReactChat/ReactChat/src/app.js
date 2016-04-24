@@ -17,7 +17,7 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var ReactDOM, React, redux_1, react_redux_1, Header_1, Sidebar_1, ChatLog_1, Footer_1, reducers_1, utils_1;
-    var AppData, defaults, store, App;
+    var channelStr, channels, defaults, store, App;
     return {
         setters:[
             function (ReactDOM_1) {
@@ -52,21 +52,21 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
             },
             function (_1) {}],
         execute: function() {
-            AppData = window["AppData"];
+            channelStr = $.ss.queryString(location.href)["channels"] || "home";
+            channels = channelStr.split(",");
             defaults = {
-                channels: [],
-                selectedChannel: AppData.selectedChannel,
-                isAuthenticated: AppData.isAuthenticated,
-                eventStreamUrl: AppData.eventStreamUrl,
-                chatHistoryUrl: AppData.chatHistoryUrl,
-                channelSubscribersUrl: AppData.channelSubscribersUrl,
+                actions: [],
+                channels: channels,
+                selectedChannel: channels[channels.length - 1],
+                eventStreamUrl: "/event-stream?channels=" + channelStr + "&t=" + new Date().getTime(),
+                channelSubscribersUrl: "/event-subscribers?channels=" + channelStr,
+                chatHistoryUrl: "/chathistory?channels=" + channelStr,
                 isConnected: false,
-                anonMsgId: -1,
+                isAuthenticated: false,
                 messages: [],
                 channelUsers: {},
                 users: [],
                 selectedUser: null,
-                requiresUserRefresh: false,
                 activeSub: null,
                 errors: [],
                 announce: null,
@@ -86,7 +86,35 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
             App = (function (_super) {
                 __extends(App, _super);
                 function App(props, context) {
+                    var _this = this;
                     _super.call(this, props, context);
+                    this.showError = function (errorMsg) {
+                        _this.props.makeAnnouncement(errorMsg);
+                    };
+                    this.tvOn = function (id) {
+                        if (id.indexOf("youtube.com") >= 0) {
+                            var qs = $.ss.queryString(id);
+                            _this.props.watchUrl(_this.templates.youtube(qs["v"]));
+                        }
+                        else if (id.indexOf("youtu.be") >= 0) {
+                            var v = $.ss.splitOnLast(id, "/")[1];
+                            _this.props.watchUrl(_this.templates.youtube(v));
+                        }
+                        else {
+                            _this.props.watchUrl(_this.templates.generic(id));
+                        }
+                    };
+                    this.tvOff = function () {
+                        _this.props.watchUrl(null);
+                    };
+                    this.onUserSelected = function (user) {
+                        _this.props.setValue("@" + user.displayName + " ");
+                        _this.footer.getWrappedInstance().txtMsg.focus();
+                    };
+                    this.onCommandSelected = function (cmd) {
+                        _this.props.setValue(cmd);
+                        _this.footer.getWrappedInstance().txtMsg.focus();
+                    };
                 }
                 Object.defineProperty(App.prototype, "templates", {
                     get: function () {
@@ -103,33 +131,56 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                     enumerable: true,
                     configurable: true
                 });
+                App.prototype.addMessages = function (msgs) {
+                    this.props.addMessages(msgs);
+                    $("#log").scrollTop(1E10);
+                };
                 App.prototype.componentDidMount = function () {
                     var _this = this;
                     this.props.selectChannel(this.props.selectedChannel);
                     this.source = new EventSource(this.props.eventStreamUrl); //disable cache
                     this.source.onerror = function (e) {
-                        _this.props.logError(e);
+                        _this.props.addMessages([{ message: "ERROR!", cls: "error" }]);
                     };
                     $.ss.eventReceivers = { "document": document };
                     $(this.source).handleServerEvents({
                         handlers: {
                             onConnect: function (u) {
-                                console.log('onConnect', u);
                                 _this.props.setActiveSub(u);
                                 _this.props.didConnect();
+                                _this.addMessages([{ message: "CONNECTED!", cls: "open" }]);
                                 $.getJSON(_this.props.chatHistoryUrl, function (r) {
-                                    _this.props.addMessages(r.results);
+                                    _this.addMessages(r.results);
                                 });
                                 _this.props.refreshUsers();
                             },
                             onReconnect: function () {
-                                console.log("onReconnect", { newEventSource: this, errorArgs: arguments });
+                                console.log("onReconnect", { errorArgs: arguments });
                             },
                             onJoin: this.props.refreshUsers,
                             onLeave: this.props.refreshUsers,
                             chat: function (msg, e) {
                                 msg.channel = e.channel;
-                                this.props.addMessages([msg]);
+                                _this.addMessages([msg]);
+                            },
+                            toggle: function () {
+                                $(this).toggle();
+                            },
+                            announce: function (msg) {
+                                var $el = $(_this.banner);
+                                _this.props.makeAnnouncement(msg);
+                                $el.fadeIn("fast");
+                                setTimeout(function () {
+                                    $el.fadeOut("slow", function () {
+                                        _this.props.makeAnnouncement("");
+                                    });
+                                }, 2000);
+                            },
+                            removeReceiver: function (name) {
+                                delete $.ss.eventReceivers[name];
+                            },
+                            addReceiver: function (name) {
+                                $.ss.eventReceivers[name] = window[name];
                             }
                         },
                         receivers: {
@@ -139,46 +190,9 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                             }
                         }
                     });
-                };
-                App.prototype.onMessagesUpdate = function (messages) {
-                    var _this = this;
-                    this.props.setMessages(messages).then(function () {
-                        var chatLog = _this.refs["chatLog"];
-                        if (!chatLog)
-                            return;
-                        $(chatLog.refs.log).scrollTop(1E10);
+                    $(document).on("customEvent", function (e, msg, msgEvent) {
+                        _this.addMessages([{ message: "[event " + e.type + " message: " + msg + "]", cls: "event", channel: msgEvent.channel }]);
                     });
-                };
-                App.prototype.showError = function (errorMsg) {
-                    this.props.makeAnnouncement(errorMsg);
-                };
-                App.prototype.announce = function (msg) {
-                    var _this = this;
-                    var $el = $(this.refs["announce"]);
-                    this.props.makeAnnouncement(msg)
-                        .then(function () {
-                        $el.fadeIn('fast');
-                    });
-                    setTimeout(function () {
-                        $el.fadeOut('slow');
-                        _this.props.makeAnnouncement("");
-                    }, 2000);
-                };
-                App.prototype.tvOn = function (id) {
-                    if (id.indexOf('youtube.com') >= 0) {
-                        var qs = $.ss.queryString(id);
-                        this.props.watchUrl(this.templates.youtube(qs["v"]));
-                    }
-                    else if (id.indexOf('youtu.be') >= 0) {
-                        var v = $.ss.splitOnLast(id, '/')[1];
-                        this.props.watchUrl(this.templates.youtube(v));
-                    }
-                    else {
-                        this.props.watchUrl(this.templates.generic(id));
-                    }
-                };
-                App.prototype.tvOff = function () {
-                    this.props.watchUrl(null);
                 };
                 //onChannelChanged(channels) {
                 //    this.setState({ channels: channels }, () => {
@@ -186,10 +200,11 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                 //    });
                 //}
                 App.prototype.render = function () {
+                    var _this = this;
                     if (this.props.channels == null)
                         return null;
                     var showTv = this.props.tvUrl ? 'block' : 'none';
-                    return (React.createElement("div", null, React.createElement(Header_1.Header, null), React.createElement("div", {ref: "announce", id: "announce"}, this.props.announce), React.createElement("div", {ref: "tv", id: "tv", style: { display: showTv }}, this.props.tvUrl), React.createElement(Sidebar_1.Sidebar, null), React.createElement(ChatLog_1.ChatLog, {ref: "chatLog"}), React.createElement(Footer_1.Footer, {ref: "footer"})));
+                    return (React.createElement("div", null, React.createElement(Header_1.Header, null), React.createElement("div", {ref: function (x) { return _this.banner = x; }, id: "announce"}, this.props.announce), React.createElement("div", {ref: "tv", id: "tv", style: { display: showTv }}, this.props.tvUrl), React.createElement(Sidebar_1.Sidebar, {onUserSelected: this.onUserSelected, onCommandSelected: this.onCommandSelected}), React.createElement(ChatLog_1.ChatLog, {ref: "chatLog"}), React.createElement(Footer_1.Footer, {ref: function (x) { return _this.footer = x; }})));
                 };
                 App = __decorate([
                     utils_1.reduxify(function (state) { return ({
@@ -208,7 +223,8 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                         refreshUsers: function () { return dispatch({ type: 'USERS_REFRESH' }); },
                         setActiveSub: function (activeSub) { return dispatch({ type: 'ACTIVESUB_SET', activeSub: activeSub }); },
                         watchUrl: function (url) { return dispatch({ type: 'TV_WATCH', url: url }); },
-                        makeAnnouncement: function (message) { return dispatch({ type: 'ANNOUNCE', message: message }); }
+                        makeAnnouncement: function (message) { return dispatch({ type: 'ANNOUNCE', message: message }); },
+                        setValue: function (value) { return dispatch({ type: 'VALUE_SET', value: value }); }
                     }); })
                 ], App);
                 return App;

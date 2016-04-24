@@ -6,19 +6,6 @@
     <link rel="stylesheet" href="css/app.css" />
     <!-- endbuild -->
     <title>ReactChat</title>
-
-    <script type="text/javascript">
-        var channelStr = "home";
-        var channels = channelStr.split(',');
-        window.AppData = {
-            channels: channels,
-            selectedChannel: channels[channels.length - 1],
-            isAuthenticated: false, //@IsAuthenticated.ToString().ToLower(),
-            eventStreamUrl: `/event-stream?channels=${channelStr}&t=${new Date().getTime()}`,
-            channelSubscribersUrl: `/event-subscribers?channels=${channelStr}`,
-            chatHistoryUrl: `/chathistory?channels=${channelStr}`
-        };
-    </script>
 </head>
 <body>
     <div class="container">

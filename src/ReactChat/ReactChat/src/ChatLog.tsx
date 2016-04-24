@@ -1,42 +1,40 @@
 import * as React from 'react';
-import { User } from './User';
-import { reduxify } from './utils';
+import { User } from './User';
+import { reduxify } from './utils';
 
 @reduxify(
     (state) => ({
-        messages: state.messages,        users: state.users,        activeSub: state.activeSub    })
+        messages: state.messages.filter(m => !m.channel || m.channel === state.selectedChannel),        users: state.users,        activeSub: state.activeSub    })
 )
 export class ChatLog extends React.Component<any, any> {
-    renderItem(o, i, msgs) {
-        var user = this.props.users.filter(user => (user.userId === o.userId))[0];
-        
-        var clsHighlight = o.msg.indexOf(this.props.activeSub.displayName.replace(" ", "")) >= 0 
+    renderItem(m, i, msgs) {
+        const user = this.props.users.filter(user => (user.userId === m.userId))[0];
+        const clsHighlight = m.msg.indexOf(this.props.activeSub.displayName.replace(" ", "")) >= 0 
             ? "highlight " 
             : "";
-
-        var msgId = "m_" + (o.id || "0");
-        var clsMsg = 'msg ' + clsHighlight + o.cls;
-
-        var lastMsg = i > 0 && msgs[i -1],
-            repeatingUser = lastMsg.userId == o.userId;
+        const msgId = `m_${m.id || "0"}`;
+        const clsMsg = `msg ${clsHighlight}${m.cls}`;
+        const lastMsg = i > 0 && msgs[i -1];
+        const repeatingUser = lastMsg.userId === m.userId;
 
         return (
             <div key={msgId} id={msgId} className={clsMsg}>
-                {o.userId && !repeatingUser 
+                {m.userId && !repeatingUser 
                     ? <b className="user">
-                        <User user={ user || $.extend(o, { displayName: o.userName }) } />
+                        <User user={ user || $.extend(m, { displayName: m.userName }) } />
                       </b> 
                     : <b>&nbsp;</b>}
-                <i>{ $.ss.tfmt12(o.time || new Date()) }</i>
-                <div>{o.msg}</div>
+                <i>{ $.ss.tfmt12(m.time || new Date()) }</i>
+                <div>{m.msg}</div>
             </div>
         );
     }
 
-    render () {
+    render() {
+        console.log(this.props.messages.map(m => m.id).sort());
         return (
             <div ref="log" id="log">
-                {this.props.messages.map(this.renderItem)}
+                {this.props.messages.map(this.renderItem.bind(this))}
             </div>
         );
     }

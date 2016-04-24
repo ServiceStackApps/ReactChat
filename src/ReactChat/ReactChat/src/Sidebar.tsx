@@ -1,7 +1,6 @@
 import * as React from 'react';
-
 import { reduxify } from './utils';
-import { User } from './User';
+import { User } from './User';
 
 @reduxify(
     (state) => ({
@@ -9,7 +8,6 @@ import { reduxify } from './utils';
         hideExamples: state.hideExamples
     }),
     (dispatch) => ({
-        selectUser: (user:string) => dispatch({ type: 'USERS_SELECT', user }),
         toggleExamples:() => dispatch({ type: 'EXAMPLES_TOGGLE' })
     })
 )
@@ -21,11 +19,11 @@ export class Sidebar extends React.Component<any, any> {
         return (
             <div id="right">
                 <div id="users">
-                {this.props.users.map(user => <User key={user.userId} user={user} onSelect={() => this.props.selectUser(user)} />)}
+                    {this.props.users.map(user => <User key={user.userId} user={user} onSelect={() => this.props.onUserSelected(user)} />)}
                 </div>
                 <div id="examples" style={{ height: height }}>
                     <span style={{position: "absolute", top: "2px", right: "7px"}} onClick={this.props.toggleExamples}>{label}</span>
-                    <span data-click="sendCommand">
+                    <span onClick={e => this.props.onCommandSelected((e.target as HTMLElement).innerHTML)}>
                         <h4><a href="https://github.com/ServiceStackApps/Chat#global-event-handlers">Example Commands</a></h4>
                         <div>/cmd.announce This is your captain speaking ...</div>
                         <div>/cmd.toggle$#channels</div>

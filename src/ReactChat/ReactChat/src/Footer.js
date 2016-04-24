@@ -13,7 +13,7 @@ System.register(["react", './utils'], function(exports_1, context_1) {
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var React, utils_1;
-    var Footer;
+    var Footer, Keys;
     return {
         setters:[
             function (React_1) {
@@ -26,12 +26,51 @@ System.register(["react", './utils'], function(exports_1, context_1) {
             Footer = (function (_super) {
                 __extends(Footer, _super);
                 function Footer() {
+                    var _this = this;
                     _super.apply(this, arguments);
+                    this.postMsg = function () {
+                        var msg = _this.txtMsg.value, parts, to = null, activeSub = _this.props.activeSub;
+                        if (msg) {
+                            _this.props.addMessageHistory(msg);
+                        }
+                        if (msg[0] === "@") {
+                            parts = $.ss.splitOnFirst(msg, " ");
+                            var toName = parts[0].substring(1);
+                            if (toName === "me") {
+                                to = activeSub.userId;
+                            }
+                            else {
+                                var toUser = _this.props.users.filter(function (user) { return user.displayName === toName.toLowerCase(); })[0];
+                                to = toUser ? toUser.userId : null;
+                            }
+                            msg = parts[1];
+                        }
+                        if (!msg || !activeSub)
+                            return;
+                        var onError = function (e) {
+                            if (e.responseJSON && e.responseJSON.responseStatus)
+                                _this.props.showError(e.responseJSON.responseStatus.message);
+                        };
+                        if (msg[0] === "/") {
+                            parts = $.ss.splitOnFirst(msg, " ");
+                            $.post("/channels/" + _this.props.selectedChannel + "/raw", {
+                                from: activeSub.id,
+                                toUserId: to,
+                                message: parts[1],
+                                selector: parts[0].substring(1)
+                            }, function () { }).fail(onError);
+                        }
+                        else {
+                            $.post("/channels/" + _this.props.selectedChannel + "/chat", {
+                                from: activeSub.id,
+                                toUserId: to,
+                                message: msg,
+                                selector: "cmd.chat"
+                            }, function () { }).fail(onError);
+                        }
+                        _this.props.setValue("");
+                    };
                 }
-                //mixins:[ 
-                //    Reflux.listenTo(Actions.userSelected,"userSelected"), 
-                //    Reflux.listenTo(Actions.setText,"setText")
-                //],
                 Footer.prototype.componentDidMount = function () {
                     this.txtMsg.focus();
                 };
@@ -42,52 +81,6 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                     enumerable: true,
                     configurable: true
                 });
-                Footer.prototype.postMsg = function () {
-                    var _this = this;
-                    var msg = this.txtMsg.value, parts, to = null, activeSub = this.props.activeSub;
-                    if (msg) {
-                        this.props.addMessageHistory(msg);
-                    }
-                    if (msg[0] === "@") {
-                        parts = $.ss.splitOnFirst(msg, " ");
-                        var toName = parts[0].substring(1);
-                        if (toName === "me") {
-                            to = activeSub.userId;
-                        }
-                        else {
-                            var toUser = this.props.users.filter(function (user) { return user.displayName === toName.toLowerCase(); })[0];
-                            to = toUser ? toUser.userId : null;
-                        }
-                        msg = parts[1];
-                    }
-                    if (!msg || !activeSub)
-                        return;
-                    var onError = function (e) {
-                        if (e.responseJSON && e.responseJSON.responseStatus)
-                            _this.props.showError(e.responseJSON.responseStatus.message);
-                    };
-                    if (msg[0] === "/") {
-                        parts = $.ss.splitOnFirst(msg, " ");
-                        $.post("/channels/" + this.props.selectedChannel + "/raw", {
-                            from: activeSub.id,
-                            toUserId: to,
-                            message: parts[1],
-                            selector: parts[0].substring(1)
-                        }, function () { }).fail(onError);
-                    }
-                    else {
-                        $.post("/channels/" + this.props.selectedChannel + "/chat", {
-                            from: activeSub.id,
-                            toUserId: to,
-                            message: msg,
-                            selector: "cmd.chat"
-                        }, function () { }).fail(onError);
-                    }
-                    this.props.setValue("");
-                };
-                Footer.prototype.userSelected = function (user) {
-                    this.setText("@" + user.displayName + " ");
-                };
                 Footer.prototype.setText = function (txt) {
                     var _this = this;
                     this.props.setValue(txt).then(function () {
@@ -102,7 +95,10 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                     var keycode = e.keyCode;
                     var value = this.props.value;
                     if ($.ss.getSelection()) {
-                        if (keycode === "9" || keycode === "13" || keycode === "32" || keycode === "39") {
+                        if (keycode === Keys.tab ||
+                            keycode === Keys.enter ||
+                            keycode === Keys.space ||
+                            keycode === Keys.right) {
                             value += " ";
                             this.props.setValue(value).then(function () {
                                 if (_this.txtMsg.setSelectionRange)
@@ -113,18 +109,19 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                         }
                     }
                     var msgHistory = this.props.msgHistory;
-                    if (keycode === "13") {
+                    var historyIndex = this.props.historyIndex;
+                    if (keycode === Keys.enter) {
                         this.props.setHistoryIndex(-1);
                         this.postMsg();
                     }
-                    else if (keycode === "38") {
-                        this.props.setHistoryIndex(Math.min(++this.props.historyIndex, msgHistory.length));
-                        this.props.setValue(this.props.msgHistory[msgHistory.length - 1 - this.props.historyIndex]);
+                    else if (keycode === Keys.up) {
+                        this.props.setHistoryIndex(Math.min(++historyIndex, msgHistory.length));
+                        this.props.setValue(msgHistory[msgHistory.length - 1 - historyIndex] || "");
                         e.preventDefault();
                     }
-                    else if (keycode === "40") {
-                        this.props.setHistoryIndex(Math.max(--this.props.historyIndex, -1));
-                        this.props.setValue(msgHistory[msgHistory.length - 1 - this.props.historyIndex]);
+                    else if (keycode === Keys.down) {
+                        this.props.setHistoryIndex(Math.max(--historyIndex, -1));
+                        this.props.setValue(msgHistory[msgHistory.length - 1 - historyIndex] || "");
                     }
                     else {
                         this.props.setHistoryIndex(-1);
@@ -149,7 +146,8 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                     }
                 };
                 Footer.prototype.render = function () {
-                    return (React.createElement("div", {id: "bottom"}, React.createElement("input", {ref: "txtMsg", id: "txtMsg", type: "text", value: this.props.value, onChange: this.handleChange, onKeyDown: this.handleKeyDown, onKeyUp: this.handleKeyUp}), React.createElement("button", {id: "btnSend", style: { marginLeft: 5 }, onClick: this.postMsg}, "Send")));
+                    var _this = this;
+                    return (React.createElement("div", {id: "bottom"}, React.createElement("input", {ref: "txtMsg", id: "txtMsg", type: "text", value: this.props.value, onChange: function (e) { return _this.handleChange(e); }, onKeyDown: function (e) { return _this.handleKeyDown(e); }, onKeyUp: function (e) { return _this.handleKeyUp(e); }}), React.createElement("button", {id: "btnSend", style: { marginLeft: 5 }, onClick: this.postMsg}, "Send")));
                 };
                 Footer = __decorate([
                     utils_1.reduxify(function (state) { return ({
@@ -164,11 +162,20 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                         addMessageHistory: function (message) { return dispatch({ type: 'MESSAGEHISTORY_ADD', message: message }); },
                         setHistoryIndex: function (index) { return dispatch({ type: 'MESSAGEHISTORY_INDEX', index: index }); },
                         setValue: function (value) { return dispatch({ type: 'VALUE_SET', value: value }); }
-                    }); })
+                    }); }, null, { withRef: true })
                 ], Footer);
                 return Footer;
             }(React.Component));
             exports_1("Footer", Footer);
+            (function (Keys) {
+                Keys[Keys["tab"] = 9] = "tab";
+                Keys[Keys["enter"] = 13] = "enter";
+                Keys[Keys["space"] = 32] = "space";
+                Keys[Keys["left"] = 37] = "left";
+                Keys[Keys["up"] = 38] = "up";
+                Keys[Keys["right"] = 39] = "right";
+                Keys[Keys["down"] = 40] = "down";
+            })(Keys || (Keys = {}));
         }
     }
 });

@@ -19,31 +19,22 @@ import 'ss-utils';
 
 declare var EventSource: ssutils.IEventSourceStatic;
 
-export interface IAppData {
-    channels: string[];
-    selectedChannel: string;
-    isAuthenticated: boolean;
-    eventStreamUrl: string;
-    channelSubscribersUrl: string;
-    chatHistoryUrl: string;
-}
-
-var AppData = window["AppData"] as IAppData;
+var channelStr = $.ss.queryString(location.href)["channels"] || "home";
+var channels = channelStr.split(",");
 
 var defaults = {
-    channels: [],
-    selectedChannel: AppData.selectedChannel,
-    isAuthenticated: AppData.isAuthenticated,
-    eventStreamUrl: AppData.eventStreamUrl,
-    chatHistoryUrl: AppData.chatHistoryUrl,
-    channelSubscribersUrl: AppData.channelSubscribersUrl,
+    actions: [],
+    channels: channels,
+    selectedChannel: channels[channels.length - 1],
+    eventStreamUrl: `/event-stream?channels=${channelStr}&t=${new Date().getTime()}`,
+    channelSubscribersUrl: `/event-subscribers?channels=${channelStr}`,
+    chatHistoryUrl: `/chathistory?channels=${channelStr}`,
     isConnected: false,
-    anonMsgId: -1,
+    isAuthenticated: false,
     messages: [],
     channelUsers:{},
     users: [],
     selectedUser: null,
-    requiresUserRefresh: false,
     activeSub: null,
     errors: [],
     announce: null,
@@ -85,7 +76,8 @@ let store = createStore(
         refreshUsers: () => dispatch({ type: 'USERS_REFRESH' }),
         setActiveSub: (activeSub:any) => dispatch({ type: 'ACTIVESUB_SET', activeSub }),
         watchUrl: (url:string) => dispatch({ type: 'TV_WATCH', url }),
-        makeAnnouncement: (message:string) => dispatch({ type:'ANNOUNCE', message})
+        makeAnnouncement: (message:string) => dispatch({ type:'ANNOUNCE', message}),
+        setValue: (value: string) => dispatch({ type: 'VALUE_SET', value })
     })
 )
 class App extends React.Component<any, any> {
@@ -96,6 +88,9 @@ class App extends React.Component<any, any> {
 
     id:string;
     source: ssutils.IEventSourceStatic;
+
+    footer: any;
+    banner: HTMLElement;
 
     get templates() {
         return {
@@ -113,35 +108,61 @@ class App extends React.Component<any, any> {
         };
     }
 
+    addMessages(msgs) {
+        this.props.addMessages(msgs);
+        $("#log").scrollTop(1E10);
+    }
+
     componentDidMount() {
         this.props.selectChannel(this.props.selectedChannel);
         this.source = new EventSource(this.props.eventStreamUrl); //disable cache
         this.source.onerror = e => {
-            this.props.logError(e);
+            this.props.addMessages([{ message: "ERROR!", cls: "error" }]);
         };
         $.ss.eventReceivers = { "document": document };
         $(this.source).handleServerEvents({
             handlers: {
                 onConnect: (u) => {
-                    console.log('onConnect', u);
                     this.props.setActiveSub(u);
 
                     this.props.didConnect();
+                    this.addMessages([{ message: "CONNECTED!", cls: "open" }]);
 
                     $.getJSON(this.props.chatHistoryUrl, r => {
-                        this.props.addMessages(r.results);
+                        this.addMessages(r.results);
                     });
 
                     this.props.refreshUsers();
                 },
                 onReconnect() {
-                    console.log("onReconnect", { newEventSource: this, errorArgs: arguments });
+                    console.log("onReconnect", { errorArgs: arguments });
                 },
                 onJoin: this.props.refreshUsers,
                 onLeave: this.props.refreshUsers,
-                chat(msg, e) {
+                chat: (msg, e) => {
                     msg.channel = e.channel;
-                    this.props.addMessages([msg]);
+                    this.addMessages([msg]);
+                },
+                toggle() {
+                    $(this).toggle();
+                },
+                announce: (msg) => {
+                    var $el = $(this.banner);
+
+                    this.props.makeAnnouncement(msg);
+                    $el.fadeIn("fast");
+
+                    setTimeout(() => {
+                        $el.fadeOut("slow", () => {
+                            this.props.makeAnnouncement("");
+                        });
+                    }, 2000);
+                },
+                removeReceiver(name) {
+                    delete $.ss.eventReceivers[name];
+                },
+                addReceiver(name) {
+                    $.ss.eventReceivers[name] = window[name];
                 }
             },
             receivers: {
@@ -151,49 +172,41 @@ class App extends React.Component<any, any> {
                 }
             }
         });
-    }
 
-    onMessagesUpdate (messages) {
-        this.props.setMessages(messages).then(() => {
-            var chatLog = this.refs["chatLog"] as any;
-            if (!chatLog) return;
-            $(chatLog.refs.log).scrollTop(1E10);
+        $(document).on("customEvent", (e, msg, msgEvent) => {
+            this.addMessages([{ message: `[event ${e.type} message: ${msg}]`, cls: "event", channel: msgEvent.channel }]);
         });
     }
 
-    showError(errorMsg) {
+    showError = (errorMsg) => {
         this.props.makeAnnouncement(errorMsg);
     }
 
-    announce(msg) {
-        var $el = $(this.refs["announce"]);
-
-        this.props.makeAnnouncement(msg)
-            .then(() => {
-                $el.fadeIn('fast');
-            });
-
-        setTimeout(() => {
-            $el.fadeOut('slow');
-            this.props.makeAnnouncement("");
-        }, 2000);
-    }
-
-    tvOn(id) {
-        if (id.indexOf('youtube.com') >= 0) {
+    tvOn = (id) => {
+        if (id.indexOf("youtube.com") >= 0) {
             var qs = $.ss.queryString(id);
             this.props.watchUrl(this.templates.youtube(qs["v"]));
         }
-        else if (id.indexOf('youtu.be') >= 0) {
-            var v = $.ss.splitOnLast(id, '/')[1];
+        else if (id.indexOf("youtu.be") >= 0) {
+            var v = $.ss.splitOnLast(id, "/")[1];
             this.props.watchUrl(this.templates.youtube(v));
         } else {
             this.props.watchUrl(this.templates.generic(id));
         }
     }
 
-    tvOff() {
+    tvOff = () => {
         this.props.watchUrl(null);
+    }
+
+    onUserSelected = (user) => {
+        this.props.setValue(`@${user.displayName} `);
+        this.footer.getWrappedInstance().txtMsg.focus();
+    }
+
+    onCommandSelected = (cmd) => {
+        this.props.setValue(cmd);
+        this.footer.getWrappedInstance().txtMsg.focus();
     }
 
     //onChannelChanged(channels) {
@@ -209,13 +222,13 @@ class App extends React.Component<any, any> {
             <div>
                 <Header />
 
-                <div ref="announce" id="announce">{this.props.announce}</div>
+                <div ref={x => this.banner = x} id="announce">{this.props.announce}</div>
                 <div ref="tv" id="tv" style={{ display: showTv }}>{this.props.tvUrl}</div>
-                <Sidebar />
+                <Sidebar onUserSelected={this.onUserSelected} onCommandSelected={this.onCommandSelected} />
 
                 <ChatLog ref="chatLog" />
 
-                <Footer ref="footer" />
+                <Footer ref={x => this.footer = x} />
             </div>
         );
     }

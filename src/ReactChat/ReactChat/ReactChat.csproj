@@ -161,9 +161,10 @@
     <TypeScriptCompile Include="typings\browser\ambient\es6-shim\es6-shim.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\react-dom\react-dom.d.ts" />
+    <TypeScriptCompile Include="typings\browser\ambient\react-redux\react-redux.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\react\react.d.ts" />
+    <TypeScriptCompile Include="typings\browser\ambient\redux\redux.d.ts" />
     <TypeScriptCompile Include="typings\browser\ambient\ss-utils\ss-utils.d.ts" />
-    <TypeScriptCompile Include="typings\main.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -177,7 +178,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="src\Actions.js" />
   </ItemGroup>
   <!--<ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

@@ -28,13 +28,10 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                 function Header() {
                     _super.apply(this, arguments);
                 }
-                Header.prototype.getDefaultProps = function () {
-                    return { isAuthenticated: false };
-                };
                 Header.prototype.openChannel = function () {
                     var chan = prompt("Join another Channel?", "ChannelName");
                     if (chan)
-                        location.href = "?channels=" + this.props.channels.items.join(",") + "," + chan.replace(/\s+/g, "");
+                        location.href = "?channels=" + this.props.channels.concat([chan.replace(/\s+/g, "")]).join(",");
                 };
                 Header.prototype.selectChannel = function (e) {
                     this.props.selectChannel(e.target.getAttribute("data-channel"));
@@ -45,11 +42,12 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                         ? React.createElement("span", null, React.createElement("span", null, "Welcome, ", this.props.activeSub.displayName), React.createElement("img", {src: this.props.activeSub.profileUrl}))
                         : null), this.props.isAuthenticated
                         ? null
-                        : React.createElement("span", null, React.createElement("a", {href: "/auth/twitter", className: "twitter"}), React.createElement("a", {href: "/auth/facebook", className: "facebook"}), React.createElement("a", {href: "/auth/github", className: "github"}))), React.createElement("ul", {id: "channels", style: { margin: "0 0 0 30px" }}, this.props.channels.map(function (channel) { return React.createElement("li", {className: _this.props.channels.selected === channel ? "selected" : "", "data-channel": channel, onClick: _this.selectChannel}, channel); }), React.createElement("li", {style: { background: "none", padding: "0 0 0 5px" }}, React.createElement("button", {onClick: this.openChannel}, "+")), React.createElement("li", {style: { background: "none", padding: 0 }}, React.createElement("span", {style: { fontSize: 13, color: "#ccc", paddingLeft: 10 }, onClick: this.props.clearMessages}, "clear")))));
+                        : React.createElement("span", null, React.createElement("a", {href: "/auth/twitter", className: "twitter"}), React.createElement("a", {href: "/auth/facebook", className: "facebook"}), React.createElement("a", {href: "/auth/github", className: "github"}))), React.createElement("ul", {id: "channels", style: { margin: "0 0 0 30px" }}, this.props.channels.map(function (channel) { return React.createElement("li", {className: _this.props.selectedChannel === channel ? "selected" : "", "data-channel": channel, onClick: _this.selectChannel.bind(_this)}, channel); }), React.createElement("li", {style: { background: "none", padding: "0 0 0 5px" }}, React.createElement("button", {onClick: this.openChannel.bind(this)}, "+")), React.createElement("li", {style: { background: "none", padding: 0 }}, React.createElement("span", {style: { fontSize: 13, color: "#ccc", paddingLeft: 10 }, onClick: this.props.clearMessages}, "clear")))));
                 };
                 Header = __decorate([
                     utils_1.reduxify(function (state) { return ({
                         channels: state.channels,
+                        selectedChannel: state.selectedChannel,
                         isAuthenticated: state.isAuthenticated,
                         activeSub: state.activeSub
                     }); }, function (dispatch) { return ({
