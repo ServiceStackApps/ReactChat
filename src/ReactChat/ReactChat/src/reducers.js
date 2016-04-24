@@ -7,16 +7,24 @@ System.register([], function(exports_1, context_1) {
         execute: function() {
             exports_1("reducers", reducers = {
                 CHANNELS_SELECT: function (state, action) { return Object.assign({}, state, { selectedChannel: action.channel }); },
-                ERRORS_LOG: function (state, action) { return Object.assign({}, state, { errors: state.errors.concat([action.message]) }); },
                 CONNECTED: function (state, action) { return Object.assign({}, state, { isConnected: true }); },
-                MESSAGES_ADD: function (state, action) { return Object.assign({}, state, { messages: state.messages.concat(convertMsgs(action.messages, anonId(state.messages))) }); },
-                MESSAGES_SET: function (state, action) { return Object.assign({}, state, { messages: convertMsgs(action.messages, anonId(state.messages)) }); },
+                MESSAGES_ADD: function (state, action) { return Object.assign({}, state, {
+                    messages: state.messages.concat(convertMsgs(action.messages, anonId(state.messages)))
+                }); },
+                MESSAGES_SET: function (state, action) { return Object.assign({}, state, {
+                    messages: convertMsgs(action.messages, anonId(state.messages))
+                }); },
                 MESSAGES_CLEAR: function (state, action) { return Object.assign({}, state, { messages: [] }); },
-                USERS_SET: function (state, action) { return Object.assign({}, state, { channelUsers: action.channelUsers, users: action.users }); },
+                USERS_SET: function (state, action) { return Object.assign({}, state, {
+                    channelUsers: action.channelUsers, users: action.users
+                }); },
                 ACTIVESUB_SET: function (state, action) { return Object.assign({}, state, { activeSub: action.activeSub }); },
                 TV_WATCH: function (state, action) { return Object.assign({}, state, { tvUrl: action.url }); },
                 ANNOUNCE: function (state, action) { return Object.assign({}, state, { announce: action.message }); },
-                ERRORS_SHOW: function (state, action) { return Object.assign({}, state, { announceError: action.message }); },
+                ERRORS_SHOW: function (state, action) { return Object.assign({}, state, {
+                    errors: state.errors.concat([action.message]),
+                    messages: state.messages.concat(convertMsgs([{ message: action.message, cls: "error" }], anonId(state.messages)))
+                }); },
                 MESSAGEHISTORY_ADD: function (state, action) { return state.msgHistory[state.msgHistory.length - 1] !== action.message
                     ? Object.assign({}, state, { msgHistory: state.msgHistory.concat([action.message]) })
                     : state; },

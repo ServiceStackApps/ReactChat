@@ -34,7 +34,7 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                         location.href = "?channels=" + this.props.channels.concat([chan.replace(/\s+/g, "")]).join(",");
                 };
                 Header.prototype.selectChannel = function (e) {
-                    this.props.selectChannel(e.target.getAttribute("data-channel"));
+                    this.props.onChannelelected(e.target.getAttribute("data-channel"));
                 };
                 Header.prototype.render = function () {
                     var _this = this;
@@ -51,7 +51,6 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                         isAuthenticated: state.isAuthenticated,
                         activeSub: state.activeSub
                     }); }, function (dispatch) { return ({
-                        selectChannel: function (channel) { return dispatch({ type: 'CHANNELS_SELECT', channel: channel }); },
                         clearMessages: function () { return dispatch({ type: 'MESSAGES_CLEAR' }); }
                     }); })
                 ], Header);

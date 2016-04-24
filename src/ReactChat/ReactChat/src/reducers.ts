@@ -1,20 +1,41 @@
 ﻿export const reducers = {
     CHANNELS_SELECT: (state, action) => Object.assign({}, state, { selectedChannel: action.channel }),
-    ERRORS_LOG: (state, action) => Object.assign({}, state, { errors: [...state.errors, action.message] }),
-    CONNECTED: (state, action) => Object.assign({}, state, { isConnected:true }),
-    MESSAGES_ADD: (state, action) => Object.assign({}, state, { messages: [...state.messages, ...convertMsgs(action.messages, anonId(state.messages))] }),
-    MESSAGES_SET: (state, action) => Object.assign({}, state, { messages: convertMsgs(action.messages, anonId(state.messages)) }),
+
+    CONNECTED: (state, action) => Object.assign({}, state, { isConnected: true }),
+
+    MESSAGES_ADD: (state, action) => Object.assign({}, state, {
+         messages: [...state.messages, ...convertMsgs(action.messages, anonId(state.messages))]
+    }),
+
+    MESSAGES_SET: (state, action) => Object.assign({}, state, {
+         messages: convertMsgs(action.messages, anonId(state.messages))
+    }),
+
     MESSAGES_CLEAR: (state, action) => Object.assign({}, state, { messages: [] }),
-    USERS_SET: (state, action) => Object.assign({}, state, { channelUsers: action.channelUsers, users: action.users }),
+
+    USERS_SET: (state, action) => Object.assign({}, state, {
+         channelUsers: action.channelUsers, users: action.users
+    }),
+
     ACTIVESUB_SET: (state, action) => Object.assign({}, state, { activeSub: action.activeSub }),
+
     TV_WATCH: (state, action) => Object.assign({}, state, { tvUrl: action.url }),
+
     ANNOUNCE: (state, action) => Object.assign({}, state, { announce: action.message }),
-    ERRORS_SHOW: (state, action) => Object.assign({}, state, { announceError: action.message }),
+
+    ERRORS_SHOW: (state, action) => Object.assign({}, state, {
+        errors: [...state.errors, action.message],
+        messages: [...state.messages, ...convertMsgs([{ message: action.message, cls: "error" }], anonId(state.messages))]
+    }),
+
     MESSAGEHISTORY_ADD: (state, action) => state.msgHistory[state.msgHistory.length - 1] !== action.message
         ? Object.assign({}, state, { msgHistory: [...state.msgHistory, action.message] })
         : state,
+
     MESSAGEHISTORY_INDEX: (state, action) => Object.assign({}, state, { historyIndex: action.index }),
-    VALUE_SET: (state, action) => Object.assign({}, state, { value:action.value }),
+
+    VALUE_SET: (state, action) => Object.assign({}, state, { value: action.value }),
+
     EXAMPLES_TOGGLE: (state, action) => Object.assign({}, state, { hideExamples: !state.hideExamples })
 };
 

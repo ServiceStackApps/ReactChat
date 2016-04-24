@@ -69,7 +69,6 @@ let store = createStore(
     }),
     (dispatch) => ({
         selectChannel: (channel:string) => dispatch({ type: 'CHANNELS_SELECT', channel }),
-        logError: (message:string) => dispatch({ type: 'ERRORS_LOG', message }),
         didConnect: () => dispatch({ type: 'CONNECTED' }),
         addMessages: (messages:string[]) => dispatch({ type: 'MESSAGES_ADD', messages }),
         setMessages: (messages:string[]) => dispatch({ type: 'MESSAGES_SET', messages }),
@@ -178,10 +177,6 @@ class App extends React.Component<any, any> {
         });
     }
 
-    showError = (errorMsg) => {
-        this.props.makeAnnouncement(errorMsg);
-    }
-
     tvOn = (id) => {
         if (id.indexOf("youtube.com") >= 0) {
             var qs = $.ss.queryString(id);
@@ -209,18 +204,17 @@ class App extends React.Component<any, any> {
         this.footer.getWrappedInstance().txtMsg.focus();
     }
 
-    //onChannelChanged(channels) {
-    //    this.setState({ channels: channels }, () => {
-    //        (this.refs["footer"] as any).refs["txtMsg"].focus();
-    //    });
-    //}
+    onChannelelected = (channel) => {
+        this.props.selectChannel(channel);
+        this.footer.getWrappedInstance().txtMsg.focus();
+    }
 
     render() {
         if (this.props.channels == null) return null;
         var showTv = this.props.tvUrl ? 'block' : 'none';
         return (
             <div>
-                <Header />
+                <Header onChannelelected={this.onChannelelected} />
 
                 <div ref={x => this.banner = x} id="announce">{this.props.announce}</div>
                 <div ref="tv" id="tv" style={{ display: showTv }}>{this.props.tvUrl}</div>

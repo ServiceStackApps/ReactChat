@@ -5,7 +5,6 @@ import { reduxify } from './utils';
     (state) => ({
         channels: state.channels,        selectedChannel: state.selectedChannel,        isAuthenticated: state.isAuthenticated,        activeSub: state.activeSub    }),
     (dispatch) => ({
-        selectChannel: (channel:string) => dispatch({ type: 'CHANNELS_SELECT', channel }),
         clearMessages: () => dispatch({ type: 'MESSAGES_CLEAR' })
     })
 )
@@ -18,7 +17,7 @@ export class Header extends React.Component<any, any> {
     }
 
     selectChannel(e) {
-        this.props.selectChannel(e.target.getAttribute("data-channel"));
+        this.props.onChannelelected(e.target.getAttribute("data-channel"));
     }
 
     render() {

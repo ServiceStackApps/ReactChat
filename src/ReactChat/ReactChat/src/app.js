@@ -88,9 +88,6 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                 function App(props, context) {
                     var _this = this;
                     _super.call(this, props, context);
-                    this.showError = function (errorMsg) {
-                        _this.props.makeAnnouncement(errorMsg);
-                    };
                     this.tvOn = function (id) {
                         if (id.indexOf("youtube.com") >= 0) {
                             var qs = $.ss.queryString(id);
@@ -113,6 +110,10 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                     };
                     this.onCommandSelected = function (cmd) {
                         _this.props.setValue(cmd);
+                        _this.footer.getWrappedInstance().txtMsg.focus();
+                    };
+                    this.onChannelelected = function (channel) {
+                        _this.props.selectChannel(channel);
                         _this.footer.getWrappedInstance().txtMsg.focus();
                     };
                 }
@@ -194,17 +195,12 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                         _this.addMessages([{ message: "[event " + e.type + " message: " + msg + "]", cls: "event", channel: msgEvent.channel }]);
                     });
                 };
-                //onChannelChanged(channels) {
-                //    this.setState({ channels: channels }, () => {
-                //        (this.refs["footer"] as any).refs["txtMsg"].focus();
-                //    });
-                //}
                 App.prototype.render = function () {
                     var _this = this;
                     if (this.props.channels == null)
                         return null;
                     var showTv = this.props.tvUrl ? 'block' : 'none';
-                    return (React.createElement("div", null, React.createElement(Header_1.Header, null), React.createElement("div", {ref: function (x) { return _this.banner = x; }, id: "announce"}, this.props.announce), React.createElement("div", {ref: "tv", id: "tv", style: { display: showTv }}, this.props.tvUrl), React.createElement(Sidebar_1.Sidebar, {onUserSelected: this.onUserSelected, onCommandSelected: this.onCommandSelected}), React.createElement(ChatLog_1.ChatLog, {ref: "chatLog"}), React.createElement(Footer_1.Footer, {ref: function (x) { return _this.footer = x; }})));
+                    return (React.createElement("div", null, React.createElement(Header_1.Header, {onChannelelected: this.onChannelelected}), React.createElement("div", {ref: function (x) { return _this.banner = x; }, id: "announce"}, this.props.announce), React.createElement("div", {ref: "tv", id: "tv", style: { display: showTv }}, this.props.tvUrl), React.createElement(Sidebar_1.Sidebar, {onUserSelected: this.onUserSelected, onCommandSelected: this.onCommandSelected}), React.createElement(ChatLog_1.ChatLog, {ref: "chatLog"}), React.createElement(Footer_1.Footer, {ref: function (x) { return _this.footer = x; }})));
                 };
                 App = __decorate([
                     utils_1.reduxify(function (state) { return ({
