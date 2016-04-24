@@ -31,7 +31,6 @@ export class ChatLog extends React.Component<any, any> {
     }
 
     render() {
-        console.log(this.props.messages.map(m => m.id).sort());
         return (
             <div ref="log" id="log">
                 {this.props.messages.map(this.renderItem.bind(this))}

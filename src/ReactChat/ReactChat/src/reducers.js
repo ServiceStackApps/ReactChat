@@ -28,7 +28,7 @@ System.register([], function(exports_1, context_1) {
                 console.log(o);
                 return o;
             };
-            anonId = function (msgs) { return msgs.filter(function (m) { return m.id != null; }).map(function (m) { return parseInt(m.id); }).sort(function (a, b) { return a - b; })[0] || -1; };
+            anonId = function (msgs) { return msgs.filter(function (m) { return m.id != null; }).map(function (m) { return m.id; }).sort(function (a, b) { return a - b; })[0] || -1; };
             convertMsgs = function (msgs, anonMsgId) { return msgs.map(function (m) { return ({
                 id: m.id || --anonMsgId,
                 channel: m.channel,
@@ -39,7 +39,7 @@ System.register([], function(exports_1, context_1) {
                 time: new Date()
             }); }); };
             exports_1("actionMiddleware", actionMiddleware = function (store) { return function (next) { return function (action) {
-                console.log('action', action);
+                //    console.log('action', action);
                 var result = next(action);
                 var fn = actions[action.type];
                 if (fn != null) {

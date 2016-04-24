@@ -45,7 +45,6 @@ System.register(['react', './User', './utils'], function(exports_1, context_1) {
                         : React.createElement("b", null, " "), React.createElement("i", null, $.ss.tfmt12(m.time || new Date())), React.createElement("div", null, m.msg)));
                 };
                 ChatLog.prototype.render = function () {
-                    console.log(this.props.messages.map(function (m) { return m.id; }).sort());
                     return (React.createElement("div", {ref: "log", id: "log"}, this.props.messages.map(this.renderItem.bind(this))));
                 };
                 ChatLog = __decorate([

@@ -23,7 +23,7 @@ const log = (o) => {
     return o;
 }
 
-const anonId = (msgs) => msgs.filter(m => m.id != null).map(m => parseInt(m.id)).sort((a, b) => a - b)[0] || -1;
+const anonId = (msgs) => msgs.filter(m => m.id != null).map(m => m.id).sort((a, b) => a - b)[0] || -1;
 
 const convertMsgs = (msgs, anonMsgId) => msgs.map(m => ({
     id: m.id || --anonMsgId,
@@ -36,7 +36,7 @@ const convertMsgs = (msgs, anonMsgId) => msgs.map(m => ({
 }));
 
 export const actionMiddleware = store => next => action => {
-    console.log('action', action);
+//    console.log('action', action);
     var result = next(action);
 
     var fn = actions[action.type];
