@@ -38,6 +38,7 @@ namespace ReactChat
             {
                 DebugMode = AppSettings.Get("DebugMode", false),
                 DefaultContentType = MimeTypes.Json,
+                AddRedirectParamsToQueryString = true,
             });
 
             this.CustomErrorHttpHandlers.Remove(HttpStatusCode.Forbidden);

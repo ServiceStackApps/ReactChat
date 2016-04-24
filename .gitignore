@@ -186,6 +186,8 @@ ClientBin/
 node_modules/
 jspm_packages/
 typings/
+wwwroot/
+webdeploy.zip
 orleans.codegen.cs
 
 # RIA/Silverlight projects
