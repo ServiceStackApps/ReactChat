@@ -157,14 +157,6 @@
     </None>
     <Content Include="wwwroot_build\build.bat" />
     <TypeScriptCompile Include="src\utils.ts" />
-    <TypeScriptCompile Include="typings\browser.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\es6-shim\index.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\jquery\index.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\react-dom\index.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\react-redux\index.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\react\index.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\redux\index.d.ts" />
-    <TypeScriptCompile Include="typings\browser\ambient\ss-utils\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
