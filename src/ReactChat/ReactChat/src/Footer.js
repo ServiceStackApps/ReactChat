@@ -26,50 +26,7 @@ System.register(["react", './utils'], function(exports_1, context_1) {
             Footer = (function (_super) {
                 __extends(Footer, _super);
                 function Footer() {
-                    var _this = this;
                     _super.apply(this, arguments);
-                    this.postMsg = function () {
-                        var msg = _this.txtMsg.value, parts, to = null, activeSub = _this.props.activeSub;
-                        if (msg) {
-                            _this.props.addMessageHistory(msg);
-                        }
-                        if (msg[0] === "@") {
-                            parts = $.ss.splitOnFirst(msg, " ");
-                            var toName = parts[0].substring(1);
-                            if (toName === "me") {
-                                to = activeSub.userId;
-                            }
-                            else {
-                                var toUser = _this.props.users.filter(function (user) { return user.displayName === toName.toLowerCase(); })[0];
-                                to = toUser ? toUser.userId : null;
-                            }
-                            msg = parts[1];
-                        }
-                        if (!msg || !activeSub)
-                            return;
-                        var onError = function (e) {
-                            if (e.responseJSON && e.responseJSON.responseStatus)
-                                _this.props.showError(e.responseJSON.responseStatus.message);
-                        };
-                        if (msg[0] === "/") {
-                            parts = $.ss.splitOnFirst(msg, " ");
-                            $.post("/channels/" + _this.props.selectedChannel + "/raw", {
-                                from: activeSub.id,
-                                toUserId: to,
-                                message: parts[1],
-                                selector: parts[0].substring(1)
-                            }, function () { }).fail(onError);
-                        }
-                        else {
-                            $.post("/channels/" + _this.props.selectedChannel + "/chat", {
-                                from: activeSub.id,
-                                toUserId: to,
-                                message: msg,
-                                selector: "cmd.chat"
-                            }, function () { }).fail(onError);
-                        }
-                        _this.props.setValue("");
-                    };
                 }
                 Footer.prototype.componentDidMount = function () {
                     this.txtMsg.focus();
@@ -86,6 +43,9 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                     this.props.setValue(txt).then(function () {
                         _this.txtMsg.focus();
                     });
+                };
+                Footer.prototype.postMsg = function () {
+                    this.props.postMessage(this.txtMsg.value);
                 };
                 Footer.prototype.handleChange = function (e) {
                     this.props.setValue(e.target.value);
@@ -151,17 +111,15 @@ System.register(["react", './utils'], function(exports_1, context_1) {
                 };
                 Footer = __decorate([
                     utils_1.reduxify(function (state) { return ({
-                        selectedChannel: state.selectedChannel,
                         users: state.users,
                         activeSub: state.activeSub,
                         value: state.value,
                         historyIndex: state.historyIndex,
                         msgHistory: state.msgHistory,
                     }); }, function (dispatch) { return ({
-                        showError: function (message) { return dispatch({ type: 'ERRORS_SHOW', message: message }); },
-                        addMessageHistory: function (message) { return dispatch({ type: 'MESSAGEHISTORY_ADD', message: message }); },
                         setHistoryIndex: function (index) { return dispatch({ type: 'MESSAGEHISTORY_INDEX', index: index }); },
-                        setValue: function (value) { return dispatch({ type: 'VALUE_SET', value: value }); }
+                        setValue: function (value) { return dispatch({ type: 'VALUE_SET', value: value }); },
+                        postMessage: function (message) { return dispatch({ type: 'MESSAGES_POST', message: message }); }
                     }); }, null, { withRef: true })
                 ], Footer);
                 return Footer;

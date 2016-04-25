@@ -21,7 +21,6 @@ export class Header extends React.Component<any, any> {
     }
 
     render() {
-        console.log(this.props.isAuthenticated);
         return (
             <div id="top">
                 <a href="https://github.com/ServiceStackApps/LiveDemos">

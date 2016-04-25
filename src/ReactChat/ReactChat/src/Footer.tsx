@@ -4,13 +4,11 @@ import { reduxify } from './utils';
 
 @reduxify(
     (state) => ({
-        selectedChannel: state.selectedChannel,
         users: state.users,        activeSub: state.activeSub,        value: state.value,        historyIndex: state.historyIndex,        msgHistory: state.msgHistory,    }),
     (dispatch) => ({
-        showError: (message:string) => dispatch({ type:'ERRORS_SHOW', message }),
-        addMessageHistory: (message:string) => dispatch({ type:'MESSAGEHISTORY_ADD', message }),
         setHistoryIndex: (index: number) => dispatch({ type: 'MESSAGEHISTORY_INDEX', index }),
-        setValue: (value:string) => dispatch({ type:'VALUE_SET', value })
+        setValue: (value: string) => dispatch({ type: 'VALUE_SET', value }),
+        postMessage: (message: string) => dispatch({ type: 'MESSAGES_POST', message })
     }),
     null,
     { withRef: true }
@@ -25,60 +23,14 @@ export class Footer extends React.Component<any, any> {
         return this.refs["txtMsg"] as HTMLInputElement;
     }
 
-    postMsg = () => {
-        var msg = this.txtMsg.value,
-            parts,
-            to = null,
-            activeSub = this.props.activeSub;
-
-        if (msg) {
-            this.props.addMessageHistory(msg);
-        }
-
-        if (msg[0] === "@") {
-            parts = $.ss.splitOnFirst(msg, " ");
-            var toName = parts[0].substring(1);
-            if (toName === "me") {
-                to = activeSub.userId;
-            } else {
-                const toUser = this.props.users.filter(user => user.displayName === toName.toLowerCase())[0];
-                to = toUser ? toUser.userId : null;
-            }
-            msg = parts[1];
-        }
-        if (!msg || !activeSub) return;
-        const onError = e => {
-            if (e.responseJSON && e.responseJSON.responseStatus)
-                this.props.showError(e.responseJSON.responseStatus.message);
-        };
-        if (msg[0] === "/") {
-            parts = $.ss.splitOnFirst(msg, " ");
-            $.post(`/channels/${this.props.selectedChannel}/raw`, {
-                    from: activeSub.id,
-                    toUserId: to,
-                    message: parts[1],
-                    selector: parts[0].substring(1)
-                },
-                () => { }
-            ).fail(onError);
-        } else {
-            $.post(`/channels/${this.props.selectedChannel}/chat`, {
-                    from: activeSub.id,
-                    toUserId: to,
-                    message: msg,
-                    selector: "cmd.chat"
-                },
-                () => { }
-            ).fail(onError);
-        }
-
-        this.props.setValue("");
-    }
-
     setText(txt) {
         this.props.setValue(txt).then(() => {
             this.txtMsg.focus();
         });
+    }
+
+    postMsg() {
+        this.props.postMessage(this.txtMsg.value);
     }
 
     handleChange(e) {

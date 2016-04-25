@@ -12049,7 +12049,7 @@ System.registerDynamic("npm:react-redux@4.4.5/lib/utils/shallowEqual.js", [], tr
   return module.exports;
 });
 
-System.registerDynamic("npm:symbol-observable@0.2.2/ponyfill.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:symbol-observable@0.2.3/ponyfill.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12062,8 +12062,8 @@ System.registerDynamic("npm:symbol-observable@0.2.2/ponyfill.js", [], true, func
       if (Symbol.observable) {
         result = Symbol.observable;
       } else {
-        if (typeof Symbol.for === 'function') {
-          result = Symbol.for('observable');
+        if (typeof Symbol['for'] === 'function') {
+          result = Symbol['for']('observable');
         } else {
           result = Symbol('observable');
         }
@@ -12077,26 +12077,26 @@ System.registerDynamic("npm:symbol-observable@0.2.2/ponyfill.js", [], true, func
   return module.exports;
 });
 
-System.registerDynamic("npm:symbol-observable@0.2.2/index.js", ["npm:symbol-observable@0.2.2/ponyfill.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:symbol-observable@0.2.3/index.js", ["npm:symbol-observable@0.2.3/ponyfill.js"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
-  module.exports = $__require('npm:symbol-observable@0.2.2/ponyfill.js')(global || window || this);
+  module.exports = $__require('npm:symbol-observable@0.2.3/ponyfill.js')(global || window || this);
   return module.exports;
 });
 
-System.registerDynamic("npm:symbol-observable@0.2.2.js", ["npm:symbol-observable@0.2.2/index.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:symbol-observable@0.2.3.js", ["npm:symbol-observable@0.2.3/index.js"], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
       GLOBAL = this;
-  module.exports = $__require('npm:symbol-observable@0.2.2/index.js');
+  module.exports = $__require('npm:symbol-observable@0.2.3/index.js');
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/createStore.js", ["npm:lodash@4.11.1/isPlainObject.js", "npm:symbol-observable@0.2.2.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/createStore.js", ["npm:lodash@4.11.1/isPlainObject.js", "npm:symbol-observable@0.2.3.js"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12107,7 +12107,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/createStore.js", ["npm:lodash@4.11.1
   exports["default"] = createStore;
   var _isPlainObject = $__require('npm:lodash@4.11.1/isPlainObject.js');
   var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
-  var _symbolObservable = $__require('npm:symbol-observable@0.2.2.js');
+  var _symbolObservable = $__require('npm:symbol-observable@0.2.3.js');
   var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {"default": obj};
@@ -12217,7 +12217,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/createStore.js", ["npm:lodash@4.11.1
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/combineReducers.js", ["npm:redux@3.5.1/lib/createStore.js", "npm:lodash@4.11.1/isPlainObject.js", "npm:redux@3.5.1/lib/utils/warning.js", "github:jspm/nodelibs-process@0.1.2.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/combineReducers.js", ["npm:redux@3.5.2/lib/createStore.js", "npm:lodash@4.11.1/isPlainObject.js", "npm:redux@3.5.2/lib/utils/warning.js", "github:jspm/nodelibs-process@0.1.2.js"], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
@@ -12226,10 +12226,10 @@ System.registerDynamic("npm:redux@3.5.1/lib/combineReducers.js", ["npm:redux@3.5
     'use strict';
     exports.__esModule = true;
     exports["default"] = combineReducers;
-    var _createStore = $__require('npm:redux@3.5.1/lib/createStore.js');
+    var _createStore = $__require('npm:redux@3.5.2/lib/createStore.js');
     var _isPlainObject = $__require('npm:lodash@4.11.1/isPlainObject.js');
     var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
-    var _warning = $__require('npm:redux@3.5.1/lib/utils/warning.js');
+    var _warning = $__require('npm:redux@3.5.2/lib/utils/warning.js');
     var _warning2 = _interopRequireDefault(_warning);
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : {"default": obj};
@@ -12317,7 +12317,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/combineReducers.js", ["npm:redux@3.5
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/bindActionCreators.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/bindActionCreators.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12351,7 +12351,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/bindActionCreators.js", [], true, fu
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/applyMiddleware.js", ["npm:redux@3.5.1/lib/compose.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/applyMiddleware.js", ["npm:redux@3.5.2/lib/compose.js"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12370,7 +12370,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/applyMiddleware.js", ["npm:redux@3.5
     return target;
   };
   exports["default"] = applyMiddleware;
-  var _compose = $__require('npm:redux@3.5.1/lib/compose.js');
+  var _compose = $__require('npm:redux@3.5.2/lib/compose.js');
   var _compose2 = _interopRequireDefault(_compose);
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {"default": obj};
@@ -12403,7 +12403,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/applyMiddleware.js", ["npm:redux@3.5
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/compose.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/compose.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12438,7 +12438,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/compose.js", [], true, function($__r
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/utils/warning.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/utils/warning.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12457,7 +12457,7 @@ System.registerDynamic("npm:redux@3.5.1/lib/utils/warning.js", [], true, functio
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1/lib/index.js", ["npm:redux@3.5.1/lib/createStore.js", "npm:redux@3.5.1/lib/combineReducers.js", "npm:redux@3.5.1/lib/bindActionCreators.js", "npm:redux@3.5.1/lib/applyMiddleware.js", "npm:redux@3.5.1/lib/compose.js", "npm:redux@3.5.1/lib/utils/warning.js", "github:jspm/nodelibs-process@0.1.2.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2/lib/index.js", ["npm:redux@3.5.2/lib/createStore.js", "npm:redux@3.5.2/lib/combineReducers.js", "npm:redux@3.5.2/lib/bindActionCreators.js", "npm:redux@3.5.2/lib/applyMiddleware.js", "npm:redux@3.5.2/lib/compose.js", "npm:redux@3.5.2/lib/utils/warning.js", "github:jspm/nodelibs-process@0.1.2.js"], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
@@ -12466,17 +12466,17 @@ System.registerDynamic("npm:redux@3.5.1/lib/index.js", ["npm:redux@3.5.1/lib/cre
     'use strict';
     exports.__esModule = true;
     exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
-    var _createStore = $__require('npm:redux@3.5.1/lib/createStore.js');
+    var _createStore = $__require('npm:redux@3.5.2/lib/createStore.js');
     var _createStore2 = _interopRequireDefault(_createStore);
-    var _combineReducers = $__require('npm:redux@3.5.1/lib/combineReducers.js');
+    var _combineReducers = $__require('npm:redux@3.5.2/lib/combineReducers.js');
     var _combineReducers2 = _interopRequireDefault(_combineReducers);
-    var _bindActionCreators = $__require('npm:redux@3.5.1/lib/bindActionCreators.js');
+    var _bindActionCreators = $__require('npm:redux@3.5.2/lib/bindActionCreators.js');
     var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
-    var _applyMiddleware = $__require('npm:redux@3.5.1/lib/applyMiddleware.js');
+    var _applyMiddleware = $__require('npm:redux@3.5.2/lib/applyMiddleware.js');
     var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
-    var _compose = $__require('npm:redux@3.5.1/lib/compose.js');
+    var _compose = $__require('npm:redux@3.5.2/lib/compose.js');
     var _compose2 = _interopRequireDefault(_compose);
-    var _warning = $__require('npm:redux@3.5.1/lib/utils/warning.js');
+    var _warning = $__require('npm:redux@3.5.2/lib/utils/warning.js');
     var _warning2 = _interopRequireDefault(_warning);
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : {"default": obj};
@@ -12494,16 +12494,16 @@ System.registerDynamic("npm:redux@3.5.1/lib/index.js", ["npm:redux@3.5.1/lib/cre
   return module.exports;
 });
 
-System.registerDynamic("npm:redux@3.5.1.js", ["npm:redux@3.5.1/lib/index.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:redux@3.5.2.js", ["npm:redux@3.5.2/lib/index.js"], true, function($__require, exports, module) {
   ;
   var define,
       global = this,
       GLOBAL = this;
-  module.exports = $__require('npm:redux@3.5.1/lib/index.js');
+  module.exports = $__require('npm:redux@3.5.2/lib/index.js');
   return module.exports;
 });
 
-System.registerDynamic("npm:react-redux@4.4.5/lib/utils/wrapActionCreators.js", ["npm:redux@3.5.1.js"], true, function($__require, exports, module) {
+System.registerDynamic("npm:react-redux@4.4.5/lib/utils/wrapActionCreators.js", ["npm:redux@3.5.2.js"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12511,7 +12511,7 @@ System.registerDynamic("npm:react-redux@4.4.5/lib/utils/wrapActionCreators.js", 
       GLOBAL = this;
   exports.__esModule = true;
   exports["default"] = wrapActionCreators;
-  var _redux = $__require('npm:redux@3.5.1.js');
+  var _redux = $__require('npm:redux@3.5.2.js');
   function wrapActionCreators(actionCreators) {
     return function(dispatch) {
       return (0, _redux.bindActionCreators)(actionCreators, dispatch);
@@ -13186,7 +13186,7 @@ System.registerDynamic("npm:react-redux@4.4.5.js", ["npm:react-redux@4.4.5/lib/i
   return module.exports;
 });
 
-System.register("src/deps.js", ["npm:react@15.0.1.js", "npm:react-dom@15.0.1.js", "npm:redux@3.5.1.js", "npm:react-redux@4.4.5.js"], function(exports_1, context_1) {
+System.register("src/deps.js", ["npm:react@15.0.1.js", "npm:react-dom@15.0.1.js", "npm:redux@3.5.2.js", "npm:react-redux@4.4.5.js"], function(exports_1, context_1) {
   "use strict";
   var __moduleName = context_1 && context_1.id;
   var __extends = (this && this.__extends) || function(d, b) {
