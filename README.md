@@ -8,33 +8,33 @@ demo into a [TypeScript](http://www.typescriptlang.org/), [React](http://faceboo
 
 > Live Demo: http://react-chat.servicestack.net
 
+## React App VS.NET Template
+
 React Chat was developed using 
 [ServiceStackVS's](https://github.com/ServiceStack/ServiceStackVS) npm-based **React App** 
-VS.NET SPA Template providing a productive integrated client / server solution for building modern 
-complex JavaScript Single Page Apps in VS.NET that includes today's best-of-class components:
+VS.NET SPA Template providing a productive integrated solution for building modern complex JavaScript 
+Single Page Apps in VS.NET that includes the following best-of-class components:
 
   - [TypeScript](http://www.typescriptlang.org/) - Superset of JavaScript with optional typing, advanced language features and down-level ES5 support
   - [JSPM](http://jspm.io/) - JavaScript Package Manager supporting SystemJS modules and multiple npm and GitHub repositories 
   - [typings](https://github.com/typings/typings) - Package manager to search and install TypeScript definition files
   - [React](https://facebook.github.io/react/) - Simple, high-performance JavaScript UI Framework utilizing a Virtual DOM and Reactive Data flows
 
-Whilst the pre-configured [Gulp](http://gulpjs.com/) scripts provides Client and Server automation of
-packaging, bundling, minifying and deployments via MS WebDeploy encompassing a productive base for the 
-development of large-scale, JavaScript Apps that's further enhanced by a great development experience 
-within Visual Studio.
+Whilst the pre-configured [Gulp](http://gulpjs.com/) scripts provides automation scripts for Client and Server
+packaging, bundling, minifying and deployments via MS WebDeploy. 
 
 ## [TypeScript Redux](https://github.com/ServiceStackApps/typescript-redux)
 
 React Chat also uses [Redux](https://github.com/reactjs/redux) - the most popular Flux-like library
 for maintaining Application state in React Apps. If you're new to any of these technologies we recommend going 
 through our in-depth [TypeScript, React + Redux step-by-step Guide](https://github.com/ServiceStackApps/typescript-redux)
-which walks you through from building a Hello World TypeScript React project from scratch to building a more 
-complex network-connected Server Events App. 
+which walks you through from building the simplest Hello World TypeScript React project to a more complex 
+real-time networked Server Events App.
 
 ## Pre-requisites 
 
-If you haven't yet, install [ServiceStackVS VS.NET extension](https://github.com/ServiceStack/ServiceStack/wiki/Creating-your-first-project#step-1-download-and-install-servicestackvs).
-You'll also need to [install TypeScript for VS.NET](http://www.typescriptlang.org/#download-links).
+If you haven't installed it yet, you'll need [ServiceStackVS VS.NET extension](https://github.com/ServiceStack/ServiceStack/wiki/Creating-your-first-project#step-1-download-and-install-servicestackvs).
+as well as [TypeScript for VS.NET](http://www.typescriptlang.org/#download-links).
 
 ## Getting Started
 
@@ -43,45 +43,44 @@ To create a Single Page React Apps with ServiceStack choose the **React App** VS
 ![](https://raw.githubusercontent.com/ServiceStack/Assets/master/img/livedemos/chat-react/ssvs-proj-template.png)
 
 This can take up to a few minutes to fetch all the javascript packages from npm. You can watch the **Output** 
-window to view the progress. 
+window to view the progress: 
 
 ![](https://raw.githubusercontent.com/ServiceStackApps/typescript-react-template/master/img/ServiceStackVS-npm-output.png)
 
-Once it's completed you can run hit **F5** to run the App and see a working
-client/server Hello World React App:
+Once completed, hit **F5** to run the App and see a working client/server Hello World React App:
 
 ![](https://raw.githubusercontent.com/ServiceStackApps/typescript-react-template/master/img/default-app.png)
 
 ## Optimal Development and Deployment workflow
 
 Fast dev iterations are one of the immediate productivity benefits when developing JavaScript Apps. By using
-TypeScript we sacrifice a bit of the immediacy as we're no longer developing the JavaScript source files
-the browsers will run directly but with VS.NET's TypeScript support we can get pretty close which will 
-generate the corresponding `.js` source files each time we save a TypeScript `.ts` source file.
+TypeScript we sacrifice a bit of the immediacy as we're no longer editing the JavaScript source files directly
+that the browsers will run, but VS.NET's TypeScript support gets us pretty close as it will generate the 
+corresponding `.js` each time we save its original TypeScript `.ts` source file.
 
-Much of the time the development experience with TypeScript is seamless as by the time we modify our source 
-files in VS.NET and hit **Ctrl+S** to save our TypeScript source files and switch over to our browser 
-the `.js` files are already generated and by the time we reload our app. Although you'll want to keep an 
-eye on the **Error List** VS.NET Tab for any TypeScript compiler errors as they'll indicate any remaining 
-errors you need to fix before TypeScript is able to generate the `.js` files.
+A lot of the time the development experience with TypeScript is seamless as by the time we hit **Ctrl+S** 
+to save our modified TypeScript source files and switch over to our browser the `.js` files are already 
+generated by the time we reload our app. Although you'll want to keep an eye on the **Error List** VS.NET Tab 
+for any TypeScript compiler errors as they'll indicate any remaining errors you'll need to fix in order for
+TypeScript to generate the `.js` files.
 
 This is the typical workflow during development where you'll mostly just be editing TypeScript `.ts` files 
-under `src/` and switching to the browser to view your changes. You won't need to run any of the Gulp tasks
-during development as they're primarily for staging and packaging your App for production so it's ready for
-deployment.
+under `src/` folder and switching to the browser to view your changes. You won't need to run any of the Gulp 
+tasks during development as they're primarily for staging and packaging your App for production so it's 
+ready for deployment.
 
 ## Installing additional libraries
 
 Having an npm-based VS.NET Template gives us access to the largest repository of JavaScript libraries available.
-For front-end dependencies we'll be using [JSPM](http://jspm.io/) to fetch all our non-default packages for
+For front-end dependencies we'll be using [JSPM](http://jspm.io/) to fetch all our additional JS packages for
 us. 
 
 The easiest way to use JSPM is via the console which you can do by holding down **Shift** whilst 
-right-clicking the **ReactChat** Host project folder to bring up a console at that directory:
+right-clicking the **ReactChat** Host project folder to open a new console at that directory:
 
 ![](https://raw.githubusercontent.com/ServiceStack/Assets/master/img/livedemos/chat-react/open-console.png)
 
-When the console is open we can get jspm to fetch our dependencies for us, we'll first need **redux**:
+With the console open, we can get jspm to fetch our dependencies for us. Chat just needs **redux**:
 
     c:\proj> jspm install redux
     
@@ -92,7 +91,7 @@ And Redux's bindings to React, **react-redux**:
 The list of dependencies are maintained in jspm's `config.js` with the libraries themselves stored under 
 `jspm_packages/` folder. 
 
-Since we're using TypeScript we'll also need the ambient Type Definitions of both libraries:
+Since we're using TypeScript we'll also need the ambient Type Definitions for both libraries:
 
     c:\proj> typings install redux --ambient --save
 
@@ -110,25 +109,10 @@ files, e.g:
 
 ### Updating deps.lib.js cache
 
-It's recommended after installing new packages to modify `src/deps.tsx` to add 
-reference to the new packages then rerun the **00-update-deps-js** Gulp task which will generate a cache
-of dependencies in `deps.lib.js` which will minimize the number of requests and allow for faster developer 
-iteration times.
-
-### .gitignore
-
-Similar to how we ignore NuGet `packages/` folder in **.gitignore** to avoid checking them into our Git
-repository, we'll want to do the same for npm, jspm and typing folders as well. We also don't need to
-check in the staging `wwwroot/` folder or the `webdeploy.zip` MS WebDeploy package that our Gulp script 
-generates for us, which we can all ignore by adding them to Git repositories **.gitignore**:
-
-```
-node_modules/
-jspm_packages/
-typings/
-wwwroot/
-webdeploy.zip
-```
+It's recommended after installing new packages to modify `src/deps.tsx` to add reference to the new modules 
+then rerun the **00-update-deps-js** Gulp task to generate a cache of the referenced dependencies in 
+`deps.lib.js`. This will minimize the number of requests required to load the App in development and allow 
+for faster developer iteration times.
 
 ## default.html
 
@@ -544,9 +528,9 @@ export const actions = {
 ```
 
 By maintaining non-UI side-effects that indirectly trigger state changes in middleware similar to how we're 
-maintaining Reducers, we're in essence just leveraging the pub/sub and automatic state synchronization 
-feature in Redux. Among other benefits this now lets any component trigger any effect with a normal message
-dispatch:
+maintaining Reducers, we're leveraging the pub/sub and automatic state synchronization features in Redux in
+order to communicate between components. Among other benefits this now lets any component trigger any 
+action with a normal message dispatch:
 
 ```typescript
 store.dispatch({ type: 'USERS_REFRESH' });
@@ -556,10 +540,12 @@ store.dispatch({ type: 'MESSAGES_POST', message:'Hello, World!' });
 
 ## Chat App Components
 
-The Redux store is the conduit of how all our App components fit together with the `@reduxify()` annotation
-declaratively capturing both the **inputs** and **outputs** that each component needs. The only thing
-that remains is importing all existing logic into the different React components and wire them to use 
-injected component properties:
+The Redux store is the conduit binding all App components together to the App state, the relationships 
+of which are declared in the `@reduxify()` annotation which captures both the **inputs** and **outputs** 
+each component needs - both are injected into the React Component via properties. 
+
+With the structre in-place all that remains is to import all existing logic into their different 
+React Components and wire them to use injected properties:
 
 #### [app.tsx](https://github.com/ServiceStackApps/ReactChat/blob/master/src/ReactChat/ReactChat/src/app.tsx)
 
@@ -1039,9 +1025,9 @@ enum Keys {
 
 ## Packaging and Deployment
 
-With the React Components above we now have a complete front-end Chat Application, what's next is to stage
-our app by running the **default** Gulp task which copies all our project client and server resources
-into the `wwwroot/` staging folder: 
+With the React Components above we now have a complete front-end Chat App, what's next is to package
+our app for production by running the **default** Gulp task which copies all our project client and server 
+resources into the `wwwroot/` staging folder: 
 
     wwwroot/
         bin/
@@ -1058,8 +1044,8 @@ into the `wwwroot/` staging folder:
 
 The 
 [wwwroot_build/deploy/](https://github.com/ServiceStackApps/ReactChat/tree/master/src/ReactChat/ReactChat/wwwroot_build/deploy) 
-folder contains files you want available for production and copied into the staged folder which we use to
-store and copy the production `appsettings.txt` that override default `<appSettings/>`.
+folder contains any additional files you want available for production which are also copied into the 
+staging folder and is whate we use to copy the production `appsettings.txt` to override default `<appSettings/>`.
 
 The result is a complete stand-alone ASP.NET Web Application that's ready for production deployment which 
 we can deploy by populating `wwwroot_build/publish/config.json` with MS WebDeploy settings:
@@ -1073,14 +1059,10 @@ we can deploy by populating `wwwroot_build/publish/config.json` with MS WebDeplo
 }
 ```
 
-> If you are using Github's default **VisualStudio** ignore template, this file will not be included in 
-source control due to the default `publish/` folder being ignored. If you're not you'll want to ensure
-this sensitive config.json is not committed into a public repository.
+Then running the **03-deploy-app** Gulp task which creates a `webdeploy.zip` package of the staging `wwwroot/` 
+folder and deploys it using MS WebDeploy to the remote `serverAddress` specified in the `config.json`.
 
-Then run the **03-deploy-app** Gulp task which packages the staging `wwwroot/` folder into the 
-`webdeploy.zip` package that is deployed using MS WebDeploy to the `serverAddress` in the `config.json` above.
-
-When the **03-deploy-app** Gulp task completes you can open it up in your browser to see the latest changes!
+When **03-deploy-app** completes you can open the remote address in your browser to see the latest changes!
 
 [![](https://raw.githubusercontent.com/ServiceStack/Assets/master/img/livedemos/chat-react/screenshot.png)](http://react-chat.servicestack.net/)
 
@@ -1090,4 +1072,21 @@ The Gulp deploy task shows a quick way of updating your development server quick
 your application. For more information on use web-deploy using either Gulp or just Visual Studio publish, 
 see [WebDeploy with AWS](https://github.com/ServiceStack/ServiceStack/wiki/Simple-Deployments-to-AWS-with-WebDeploy).
 
+### .gitignore
 
+Similar to how we ignore NuGet `packages/` folder in **.gitignore** to avoid checking them into our Git
+repository, we'll want to do the same for npm, jspm and typing folders as well. We also don't need to
+check in the staging `wwwroot/` folder or the `webdeploy.zip` MS WebDeploy package that our Gulp script 
+generates for us, which we can all ignore by adding them to Git repositories **.gitignore**:
+
+```
+node_modules/
+jspm_packages/
+typings/
+wwwroot/
+webdeploy.zip
+```
+
+If you're using Github's default **VisualStudio** ignore template the `publish/` folder will be ignored
+by default. If you're not you'll also want to include `publish/` so the sensitive `publish/config.json`
+does not get committed to a public repo.
