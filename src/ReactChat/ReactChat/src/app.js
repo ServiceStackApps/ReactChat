@@ -202,10 +202,8 @@ System.register(['react-dom', 'react', 'redux', 'react-redux', './Header', './Si
                 };
                 App.prototype.render = function () {
                     var _this = this;
-                    if (this.props.channels == null)
-                        return null;
                     var showTv = this.props.tvUrl ? 'block' : 'none';
-                    return (React.createElement("div", null, React.createElement(Header_1.Header, {onChannelelected: this.onChannelelected}), React.createElement("div", {ref: function (x) { return _this.banner = x; }, id: "announce"}, this.props.announce), React.createElement("div", {ref: "tv", id: "tv", style: { display: showTv }}, this.props.tvUrl), React.createElement(Sidebar_1.Sidebar, {onUserSelected: this.onUserSelected, onCommandSelected: this.onCommandSelected}), React.createElement(ChatLog_1.ChatLog, {ref: "chatLog"}), React.createElement(Footer_1.Footer, {ref: function (x) { return _this.footer = x; }})));
+                    return (React.createElement("div", null, React.createElement(Header_1.Header, {onChannelelected: this.onChannelelected}), React.createElement("div", {ref: function (x) { return _this.banner = x; }, id: "announce"}, this.props.announce), React.createElement("div", {id: "tv", style: { display: showTv }}, this.props.tvUrl), React.createElement(Sidebar_1.Sidebar, {onUserSelected: this.onUserSelected, onCommandSelected: this.onCommandSelected}), React.createElement(ChatLog_1.ChatLog, null), React.createElement(Footer_1.Footer, {ref: function (x) { return _this.footer = x; }})));
                 };
                 App = __decorate([
                     utils_1.reduxify(function (state) { return ({

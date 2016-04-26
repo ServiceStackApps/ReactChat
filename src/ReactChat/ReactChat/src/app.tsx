@@ -217,17 +217,16 @@ class App extends React.Component<any, any> {
     }
 
     render() {
-        if (this.props.channels == null) return null;
-        var showTv = this.props.tvUrl ? 'block' : 'none';
+        const showTv = this.props.tvUrl ? 'block' : 'none';
         return (
             <div>
                 <Header onChannelelected={this.onChannelelected} />
 
                 <div ref={x => this.banner = x} id="announce">{this.props.announce}</div>
-                <div ref="tv" id="tv" style={{ display: showTv }}>{this.props.tvUrl}</div>
+                <div id="tv" style={{ display: showTv }}>{this.props.tvUrl}</div>
                 <Sidebar onUserSelected={this.onUserSelected} onCommandSelected={this.onCommandSelected} />
 
-                <ChatLog ref="chatLog" />
+                <ChatLog />
 
                 <Footer ref={x => this.footer = x} />
             </div>

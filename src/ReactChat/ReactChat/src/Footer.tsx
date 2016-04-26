@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { reduxify } from './utils';
 
 @reduxify(
