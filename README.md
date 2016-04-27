@@ -288,11 +288,11 @@ to its children via properties.
 
 As we're using Redux we're no longer maintaining state within different React components, instead the single 
 Redux store keeps a snapshot of our entire App's state and we use the `@reduxify()` annotation to 
-declaratively specify which state our Component needs access to and what state mutations it intends to make 
-which are both combined with the properties of the component and injected via properties.
+declaratively specify which state our Component needs access to and what state modifications it intends to 
+make which are both merged with the properties of the Component and made available via properties.
 
 Here the top-level `App` component uses the `@reduxify()` annotation to declare the properties it needs and 
-which actions it dispatches:
+the actions it dispatches:
 
 ```typescript
 @reduxify(
@@ -320,8 +320,8 @@ which actions it dispatches:
 class App extends React.Component<any, any> { ... }
 ```
 
-Add a top-level React Redux `<Provider>` component makes this possible by injecting the Redux `store` 
-into each of the React components annotated with `@reduxify()`:
+Adding a top-level React Redux `<Provider>` component is what makes this possible which takes care of 
+injecting the Redux `store` into each of the React components annotated with `@reduxify()`:
 
 ```typescript
 ReactDOM.render(
@@ -422,7 +422,7 @@ export const reducers = {
         }], anonId(state.messages))]
     }),
 
-    MESSAGEHISTORY_ADD: (state, action) => state.msgHistory[state.msgHistory.length-1] !== action.message
+    MESSAGEHISTORY_ADD: (state,action) => state.msgHistory[state.msgHistory.length-1] != action.message
         ? Object.assign({}, state, { msgHistory: [...state.msgHistory, action.message] })
         : state,
 
@@ -530,7 +530,7 @@ export const actions = {
 By maintaining non-UI side-effects that indirectly trigger state changes in middleware similar to how we're 
 maintaining Reducers, we're leveraging the pub/sub and automatic state synchronization features in Redux in
 order to communicate between components. Among other benefits this now lets any component trigger any 
-action with a normal message dispatch:
+action with a normal message dispatch from anywhere in our App:
 
 ```typescript
 store.dispatch({ type: 'USERS_REFRESH' });
