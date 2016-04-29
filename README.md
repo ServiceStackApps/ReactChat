@@ -1045,7 +1045,7 @@ resources into the `wwwroot/` staging folder:
 The 
 [wwwroot_build/deploy/](https://github.com/ServiceStackApps/ReactChat/tree/master/src/ReactChat/ReactChat/wwwroot_build/deploy) 
 folder contains any additional files you want available for production which are also copied into the 
-staging folder and is whate we use to copy the production `appsettings.txt` to override default `<appSettings/>`.
+staging folder and what is used to copy the production `appsettings.txt` to override default `<appSettings/>`.
 
 The result is a complete stand-alone ASP.NET Web Application that's ready for production deployment which 
 we can deploy by populating `wwwroot_build/publish/config.json` with MS WebDeploy settings:
