@@ -121,7 +121,7 @@ each time we add a JavaScript dependency as JSPM takes care of loading all our J
 which it does by looking at the same `config.js` it uses to maintain the list of installed JS packages.
 
 The gulp [useref](https://www.npmjs.com/package/gulp-useref) plugin allows us to markup our `default.html`
-starting page with rules of how we want our development resources packages for production:
+starting page with rules of how we want our development references rewritten for production:
 
 ```html
 <!DOCTYPE html>
