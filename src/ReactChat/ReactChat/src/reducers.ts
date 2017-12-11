@@ -1,4 +1,6 @@
-﻿export const reducers = {
+﻿import * as $ from 'jquery';
+
+export const reducers = {
     CHANNELS_SELECT: (state, action) => Object.assign({}, state, { selectedChannel: action.channel }),
 
     CONNECTED: (state, action) => Object.assign({}, state, { isConnected: true }),
@@ -118,7 +120,8 @@ export const actions = {
             if (e.responseJSON && e.responseJSON.responseStatus)
                 store.dispatch({ type: 'ERRORS_SHOW', message: e.responseJSON.responseStatus.message });
         };
-        if (msg[0] === "/") {
+
+        if (msg[0] === "/") {
             parts = $.ss.splitOnFirst(msg, " ");
             $.post(`/channels/${state.selectedChannel}/raw`, {
                 from: activeSub.id,

@@ -37,6 +37,7 @@ namespace ReactChat
             SetConfig(new HostConfig
             {
                 DebugMode = AppSettings.Get("DebugMode", false),
+                WebHostPhysicalPath = MapProjectPath("~/wwwroot"),
                 DefaultContentType = MimeTypes.Json,
                 AddRedirectParamsToQueryString = true,
             });

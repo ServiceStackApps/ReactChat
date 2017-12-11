@@ -1,18 +1,24 @@
+import * as $ from 'jquery';
 import * as React from 'react';
 import { User } from './User';
 import { reduxify } from './utils';
 
 @reduxify(
     (state) => ({
-        messages: state.messages.filter(m => !m.channel || m.channel === state.selectedChannel),        users: state.users,        activeSub: state.activeSub    })
+        messages: state.messages.filter(m => !m.channel || m.channel === state.selectedChannel),
+        users: state.users,
+        activeSub: state.activeSub
+    })
 )
 export class ChatLog extends React.Component<any, any> {
     renderItem(m, i, msgs) {
         const user = this.props.users.filter(user => (user.userId === m.userId))[0];
-        const clsHighlight = m.msg.indexOf(this.props.activeSub.displayName.replace(" ", "")) >= 0 
+
+        const clsHighlight = m.msg.indexOf(this.props.activeSub.displayName.replace(" ", "")) >= 0 
             ? "highlight " 
             : "";
-        const msgId = `m_${m.id || "0"}`;
+
+        const msgId = `m_${m.id || "0"}`;
         const clsMsg = `msg ${clsHighlight}${m.cls}`;
         const lastMsg = i > 0 && msgs[i -1];
         const repeatingUser = lastMsg.userId === m.userId;

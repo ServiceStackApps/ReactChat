@@ -4,7 +4,7 @@
     padding: 0;
     margin: 0;
     color: #444;
-    background: url(/img/bg.jpg) no-repeat left center fixed;
+    background: url(../img/bg.jpg) no-repeat left center fixed;
     background-size: cover;
     -webkit-background-size: cover;
 }
@@ -177,9 +177,9 @@ li:hover {
     height: 20px;
     margin: 5px 5px 0 0;
 }
-.twitter { background: url(/img/twitter_normal.png) no-repeat; }
-.facebook { background: url(/img/facebook_normal.png) no-repeat; }
-.github { background: url(/img/github_normal.png) no-repeat; }
+.twitter { background: url(../img/twitter_normal.png) no-repeat; }
+.facebook { background: url(../img/facebook_normal.png) no-repeat; }
+.github { background: url(../img/github_normal.png) no-repeat; }
 #welcome {
     float: left;
     margin: 0 5px 0 0;
@@ -232,4 +232,8 @@ li:hover {
 #log {
     background: #fff;    
     opacity: .85;
+}
+.container {
+    max-width: 100%;
+    padding: 0;
 }

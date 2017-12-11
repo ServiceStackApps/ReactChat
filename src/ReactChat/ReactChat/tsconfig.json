@@ -1,19 +1,18 @@
 {
-  "compileOnSave":  true,
   "compilerOptions": {
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
     "target": "es5",
-    "module": "system",
+    "module": "commonjs",
     "jsx": "react",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "lib": [ "es2015", "dom" ]
   },
   "exclude": [
-    "typings",
+    "bin",
     "node_modules",
-    "jspm_packages",
     "wwwroot"
   ]
 }

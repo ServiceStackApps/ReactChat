@@ -1,9 +1,15 @@
+import * as $ from 'jquery';
 import * as React from "react";
 import { reduxify } from './utils';
 
 @reduxify(
     (state) => ({
-        users: state.users,        activeSub: state.activeSub,        value: state.value,        historyIndex: state.historyIndex,        msgHistory: state.msgHistory,    }),
+        users: state.users,
+        activeSub: state.activeSub,
+        value: state.value,
+        historyIndex: state.historyIndex,
+        msgHistory: state.msgHistory,
+    }),
     (dispatch) => ({
         setHistoryIndex: (index: number) => dispatch({ type: 'MESSAGEHISTORY_INDEX', index }),
         setValue: (value: string) => dispatch({ type: 'VALUE_SET', value }),
@@ -56,7 +62,8 @@ export class Footer extends React.Component<any, any> {
                 return;
             }
         }
-        const msgHistory = this.props.msgHistory;
+
+        const msgHistory = this.props.msgHistory;
         var historyIndex = this.props.historyIndex;
         if (keycode === Keys.enter) {
             this.props.setHistoryIndex(-1);
@@ -75,7 +82,8 @@ export class Footer extends React.Component<any, any> {
     }
 
     handleKeyUp(e) {
-        var value = this.props.value,
+
+        var value = this.props.value,
             activeSub = this.props.activeSub;
 
         if (!$.ss.getSelection() && value[0] === "@" && value.indexOf(" ") < 0) {

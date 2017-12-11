@@ -3,7 +3,11 @@ import { reduxify } from './utils';
 
 @reduxify(
     (state) => ({
-        channels: state.channels,        selectedChannel: state.selectedChannel,        isAuthenticated: state.isAuthenticated,        activeSub: state.activeSub    }),
+        channels: state.channels,
+        selectedChannel: state.selectedChannel,
+        isAuthenticated: state.isAuthenticated,
+        activeSub: state.activeSub
+    }),
     (dispatch) => ({
         clearMessages: () => dispatch({ type: 'MESSAGES_CLEAR' })
     })
@@ -24,8 +28,8 @@ export class Header extends React.Component<any, any> {
         return (
             <div id="top">
                 <a href="https://github.com/ServiceStackApps/LiveDemos">
-                    <img src="https://raw.githubusercontent.com/ServiceStack/Assets/master/img/artwork/logo-32-inverted.png"
-                        style={{ height: "28px", padding: "10px 0 0 0" }} />
+                    <img src={require("./assets/img/logo-32-inverted.png")}
+                        style={{ height: "34px", padding: "10px 0 0 0" }} />
                 </a>
                 <div id="social">
                     <div id="welcome">

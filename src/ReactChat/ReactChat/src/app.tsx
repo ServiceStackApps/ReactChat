@@ -1,7 +1,10 @@
 ﻿// A '.tsx' file enables JSX support in the TypeScript compiler, 
 // for more information see the following page on the TypeScript wiki:
 // https://github.com/Microsoft/TypeScript/wiki/JSX
-/// <reference path='../typings/browser.d.ts'/>
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.css';
+import './assets/css/app.css';
 
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
@@ -14,6 +17,7 @@ import { ChatLog } from './ChatLog';
 import { Footer } from './Footer';
 import { reducers, actionMiddleware } from './reducers';
 
+import * as $ from 'jquery';
 import { reduxify } from './utils';
 import 'ss-utils';
 
