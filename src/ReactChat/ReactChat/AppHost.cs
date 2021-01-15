@@ -29,8 +29,6 @@ namespace ReactChat
 
         public override void Configure(Container container)
         {
-            JsConfig.EmitCamelCaseNames = true;
-
             Plugins.Add(new RazorFormat());
             Plugins.Add(new ServerEventsFeature());
 
@@ -40,6 +38,7 @@ namespace ReactChat
                 WebHostPhysicalPath = MapProjectPath("~/wwwroot"),
                 DefaultContentType = MimeTypes.Json,
                 AddRedirectParamsToQueryString = true,
+                UseCamelCase = true,
             });
 
             this.CustomErrorHttpHandlers.Remove(HttpStatusCode.Forbidden);
